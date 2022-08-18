@@ -22,7 +22,11 @@ type Iterator[T comparable] struct {
 
 // NewList constructs a new list with sentinel nodes
 // returns a new linkedlist
-func (linkedList[T]) NewList() linkedList[T] {
+func NewList[T comparable]() linkedList[T] {
 	list := linkedList[T]{front: &node[T]{}, back: &node[T]{}}
 	return list
+}
+
+func NewConstIterator[T comparable]() Const_iterator[T] {
+	return Const_iterator[T]{}
 }
