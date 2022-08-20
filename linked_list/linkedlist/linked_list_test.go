@@ -20,6 +20,18 @@ func TestIteratorGet(t *testing.T) {
 	}
 }
 
+// TestNewList tests the NewList function returns a LinkedList with sentinel nodes, and the front and back nodes are pointing to the right nodes
+func TestNewList(t *testing.T) {
+	list := NewList[int]()
+	if list.front.next != list.back {
+		t.Fatal("Front is not set to back")
+	}
+
+	if list.back.prev != list.front {
+		t.Fatal("back prev is not set to front")
+	}
+}
+
 // // TestNewConstIterator tests the NewConstIterator function returns an Const iterator
 // func TestNewConstIterator(t *testing.T) {
 // iterator := NewConstIterator[int](nil, nil)
