@@ -2,12 +2,27 @@ package linkedlist
 
 import "testing"
 
-// TestList test the linked list interface
-func TestList(t *testing.T) {
+// makeData creates and returns an array of data for testing
+func makeData() [5]int {
+	data := make([]int, 5)
+	expected := [5]int{0, 1, 2, 3, 4}
+
+	for i := 0; i < 5; i++ {
+		data[i] = expected[i]
+	}
+
+	return expected
+}
+
+// TestInsert test the linked list interface
+func TestInsert(t *testing.T) {
+	data := makeData()
 	list := NewList[int]()
 	n := &node[int]{data: 20}
 	it := NewIterator(n, &list)
-	list.insert(&it, 20)
+	for i := 0; i < 5; i++ {
+		list.insert(&it, data[i])
+	}
 }
 
 func TestIteratorGet(t *testing.T) {

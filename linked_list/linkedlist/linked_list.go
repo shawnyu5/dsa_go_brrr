@@ -1,7 +1,5 @@
 package linkedlist
 
-import "fmt"
-
 type LinkedList[T comparable] struct {
 	front *node[T]
 	back  *node[T]
@@ -52,11 +50,19 @@ func (it Iterator[T]) get() T {
 func (l *LinkedList[T]) insert(it *Iterator[T], data T) {
 	// the starting node
 	ogNode := l.front.next
-	fmt.Println("insert")                                                           // __AUTO_GENERATED_PRINTF__
-	fmt.Println(fmt.Sprintf("insert ogNode.next != nil: %v", (ogNode.next != nil))) // __AUTO_GENERATED_PRINT_VAR__
-	// // find where the iterator is pointing to
-	// for ogNode.next != nil && ogNode.data != it.get() {
-	// ogNode = ogNode.next
-	// }
+	// find where the iterator is pointing to
+	for ogNode.next != nil && ogNode.data != it.get() {
+		ogNode = ogNode.next
+	}
 
+	// construct a new node from the data passed in
+	nn := node[T]{data: data, next: ogNode.next, prev: ogNode.prev}
+
+	if ogNode.next == nil {
+		l.back.prev.next = &nn
+		l.back.prev = &nn
+	} else {
+		ogNode.prev.next = &nn
+		ogNode.prev = &nn
+	}
 }
