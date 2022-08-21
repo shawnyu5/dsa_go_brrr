@@ -3,8 +3,8 @@ package linkedlist
 type LinkedList[T comparable] struct {
 	front *node[T]
 	back  *node[T]
-	It    Iterator[T]
-	Cit   Const_iterator[T]
+	// number of records in the list
+	numRecords int
 }
 
 type node[T comparable] struct {
