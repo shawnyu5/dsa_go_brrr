@@ -65,4 +65,10 @@ func (l *LinkedList[T]) insert(it *Iterator[T], data T) {
 		ogNode.prev.next = &nn
 		ogNode.prev = &nn
 	}
+	l.numRecords++
+}
+
+// NumRecords returns the number of records in the list
+func (l *LinkedList[T]) NumRecords() int {
+	return l.numRecords
 }
