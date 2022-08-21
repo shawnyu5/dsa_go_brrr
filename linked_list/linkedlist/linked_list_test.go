@@ -14,36 +14,44 @@ func makeData() [5]int {
 	return expected
 }
 
-// TestInsert test the linked list interface
-func TestInsert(t *testing.T) {
-	data := makeData()
+// TestNewList tests the NewList function returns a LinkedList with sentinel nodes, and the front and back nodes are pointing to the right nodes
+func TestNewList(t *testing.T) {
 	list := NewList[int]()
-	n := &node[int]{data: 20}
-	it := NewIterator(n, &list)
-	for i := 0; i < 5; i++ {
-		list.insert(&it, data[i])
+	if list.front.next != list.back {
+		t.Error("Front is not set to back")
+	}
+
+	if list.back.prev != list.front {
+		t.Error("back prev is not set to front")
 	}
 }
 
+// TestInsert tests insert function returns the correct number of records
+func TestInsert(t *testing.T) {
+	data := makeData()
+	list := NewList[int]()
+	// n := &node[int]{data: 20}
+	it := NewIterator(nil, &list)
+	for i := 0; i < 5; i++ {
+		list.insert(&it, data[i])
+		if it.get() != data[i] {
+			t.Errorf("Insert is not inserting the correct data. Expected %d, got %d", data[i], it.get())
+		}
+		// TODO: increment the iterator. Other wise, we are adding at the same place every time
+	}
+	if list.NumRecords() != 5 {
+		t.Errorf("Expected 5, got %d", list.numRecords)
+	}
+}
+
+// TestIteratorGet tests get function of the iterator returns the correct data inside the iterator
 func TestIteratorGet(t *testing.T) {
 	n := node[int]{data: 10}
 	it := &Iterator[int]{Current: &n}
 	data := it.get()
 
 	if data != 10 {
-		t.Fatal("Iterator get() does not return the correct data")
-	}
-}
-
-// TestNewList tests the NewList function returns a LinkedList with sentinel nodes, and the front and back nodes are pointing to the right nodes
-func TestNewList(t *testing.T) {
-	list := NewList[int]()
-	if list.front.next != list.back {
-		t.Fatal("Front is not set to back")
-	}
-
-	if list.back.prev != list.front {
-		t.Fatal("back prev is not set to front")
+		t.Error("Iterator get() does not return the correct data")
 	}
 }
 
