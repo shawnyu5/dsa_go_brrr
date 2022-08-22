@@ -51,3 +51,28 @@ func TestConstIteratorIncreament(t *testing.T) {
 		t.Errorf("Iterator get() does not return the correct data. Expected %d, got %d", 30, it.get())
 	}
 }
+
+// TestBegin tests begin function of the iterator and const_iterator returns the beginning of the list
+func TestBegin(t *testing.T) {
+	n := node[int]{data: 10, next: &node[int]{data: 20, next: &node[int]{data: 30}}, prev: &node[int]{data: 0}}
+	// construct a new list with sentinel nodes
+	list := NewList[int]()
+
+	it := NewIterator(&n, &list)
+	// begin and end should point to the same sentinel node
+	if it.begin() != it.end() {
+		t.Error("Iterator begin() does not return the correct data")
+	}
+}
+
+// TestCbegin tests begin function of the iterator and const_iterator returns the beginning of the list
+func TestCbegin(t *testing.T) {
+	n := node[int]{data: 10, next: &node[int]{data: 20, next: &node[int]{data: 30}}, prev: &node[int]{data: 0}}
+	// construct a new list with sentinel nodes
+	list := NewList[int]()
+
+	it := NewConstIterator(&n, &list)
+	if it.cbegin() != it.cend() {
+		t.Error("Iterator begin() does not return the correct data")
+	}
+}

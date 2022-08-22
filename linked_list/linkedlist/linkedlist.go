@@ -43,7 +43,7 @@ func (l *LinkedList[T]) insert(it *Iterator[T], data T) {
 	l.numRecords++
 }
 
-// NumRecords returns the number of records in the list
-func (l *LinkedList[T]) NumRecords() int {
+// size returns the number of records in the list
+func (l *LinkedList[T]) size() int {
 	return l.numRecords
 }

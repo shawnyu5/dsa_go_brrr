@@ -17,6 +17,11 @@ func NewConstIterator[T comparable](curr *node[T], theList *LinkedList[T]) Const
 	return Const_iterator[T]{myList: theList, current: curr}
 }
 
+// NewIterator constructs a new Iterator
+func NewIterator[T comparable](curr *node[T], theList *LinkedList[T]) Iterator[T] {
+	return Iterator[T]{myList: theList, current: curr}
+}
+
 // get returns the data from an iterator
 func (it *Iterator[T]) get() T {
 	return it.current.data
@@ -35,23 +40,23 @@ func (it *Iterator[T]) increment() {
 }
 
 // begin returns the first node in the list, excluding the sentinel node
-func (it *Const_iterator[T]) begin() Const_iterator[T] {
-	return Const_iterator[T]{myList: it.myList, current: it.myList.front.next}
-}
-
-// begin returns the first node in the list, excluding the sentinel node
-func (it *Iterator[T]) cbegin() Iterator[T] {
+func (it *Iterator[T]) begin() Iterator[T] {
 	return Iterator[T]{myList: it.myList, current: it.myList.front.next}
-}
-
-// end returns the last node in the list, the sentinel node
-func (it *Const_iterator[T]) cend() Iterator[T] {
-	return Iterator[T]{myList: it.myList, current: it.myList.back}
 }
 
 // end returns the last node in the list, the sentinel node
 func (it *Iterator[T]) end() Iterator[T] {
 	return Iterator[T]{myList: it.myList, current: it.myList.back}
+}
+
+// cbegin returns the first node in the list, excluding the sentinel node
+func (it *Const_iterator[T]) cbegin() Const_iterator[T] {
+	return Const_iterator[T]{myList: it.myList, current: it.myList.front.next}
+}
+
+// cend returns the last node in the list, the sentinel node
+func (it *Const_iterator[T]) cend() Const_iterator[T] {
+	return Const_iterator[T]{myList: it.myList, current: it.myList.back}
 }
 
 // decrement decrements the Const_iterator to the previous node

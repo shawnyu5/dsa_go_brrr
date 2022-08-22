@@ -39,7 +39,7 @@ func TestInsert(t *testing.T) {
 		// }
 		// TODO: increment the iterator. Other wise, we are adding at the same place every time
 	}
-	if list.NumRecords() != 5 {
+	if list.size() != 5 {
 		t.Errorf("Expected 5, got %d", list.numRecords)
 	}
 }
