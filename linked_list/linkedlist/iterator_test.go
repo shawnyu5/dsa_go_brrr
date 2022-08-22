@@ -1,78 +1,94 @@
 package linkedlist
 
-import "testing"
+import (
+	. "github.com/onsi/ginkgo/v2"
+	. "github.com/onsi/gomega"
+)
 
-// TestIteratorGet tests get function of the iterator returns the correct data inside the iterator
-func TestIteratorGet(t *testing.T) {
-	n := node[int]{data: 10}
-	it := &Iterator[int]{current: &n}
-	data := it.get()
+var _ = Describe("Iterator", func() {
+	It("get() should return the data within the iterator", func() {
+		n := node[int]{data: 10}
+		it := &Iterator[int]{current: &n}
+		data := it.get()
 
-	if data != 10 {
-		t.Error("Iterator get() does not return the correct data")
-	}
-}
+		Expect(data).To(Equal(10))
+	})
 
-// TestIteratorIncreament tests increment function of the iterator increments the iterator to the next node
-func TestIteratorIncreament(t *testing.T) {
-	n := node[int]{data: 10, next: &node[int]{data: 20, next: &node[int]{data: 30}}, prev: &node[int]{data: 0}}
-	it := &Iterator[int]{current: &n}
-	if it.get() != 10 {
-		t.Errorf("Iterator get() does not return the correct data. Expected %d, got %d", 10, it.get())
-	}
-	it.increment()
-	if it.get() != 20 {
-		t.Errorf("Iterator get() does not return the correct data. Expected %d, got %d", 20, it.get())
-	}
+	It("should increment the iterator to the next node", func() {
+		n := node[int]{data: 10, next: &node[int]{data: 20, next: &node[int]{data: 30}}, prev: &node[int]{data: 0}}
+		it := &Iterator[int]{current: &n}
+		Expect(it.get()).To(Equal(10))
+		it.increment()
+		Expect(it.get()).To(Equal(20))
+		it.increment()
+		Expect(it.get()).To(Equal(30))
+	})
 
-	it.increment()
-	if it.get() != 30 {
-		t.Errorf("Iterator get() does not return the correct data. Expected %d, got %d", 30, it.get())
-	}
-}
+	Context("(c)begin()", func() {
+		It("should return the begining of the list - iterator", func() {
+			n := node[int]{data: 10, next: &node[int]{data: 20, next: &node[int]{data: 30}}, prev: &node[int]{data: 0}}
+			// construct a new list with sentinel nodes
+			list := NewList[int]()
 
-// TestIteratorIncreament tests increment function of the const_iterator increments the iterator to the next node
-func TestConstIteratorIncreament(t *testing.T) {
-	n := node[int]{data: 10, next: &node[int]{data: 20, next: &node[int]{data: 30}}, prev: &node[int]{data: 0}}
-	list := LinkedList[int]{front: &node[int]{data: 10}, back: &node[int]{data: 20}}
+			it := NewIterator(&n, &list)
+			// begin and end should point to the same sentinel node
+			Expect(it.begin()).To(Equal(it.end()))
+		})
 
-	it := NewConstIterator(&n, &list)
+		It("should return the begining of the list - const iterator", func() {
+			n := node[int]{data: 10, next: &node[int]{data: 20, next: &node[int]{data: 30}}, prev: &node[int]{data: 0}}
+			// construct a new list with sentinel nodes
+			list := NewList[int]()
 
-	if it.get() != 10 {
-		t.Errorf("Iterator get() does not return the correct data. Expected %d, got %d", 10, it.get())
-	}
-	it.increment()
-	if it.get() != 20 {
-		t.Errorf("Iterator get() does not return the correct data. Expected %d, got %d", 20, it.get())
-	}
+			it := NewConstIterator(&n, &list)
+			// begin and end should point to the same sentinel node
+			Expect(it.cbegin()).To(Equal(it.cend()))
+		})
+	})
+})
 
-	it.increment()
-	if it.get() != 30 {
-		t.Errorf("Iterator get() does not return the correct data. Expected %d, got %d", 30, it.get())
-	}
-}
+// // TestIteratorIncreament tests increment function of the const_iterator increments the iterator to the next node
+// func TestConstIteratorIncreament(t *testing.T) {
+// n := node[int]{data: 10, next: &node[int]{data: 20, next: &node[int]{data: 30}}, prev: &node[int]{data: 0}}
+// list := LinkedList[int]{front: &node[int]{data: 10}, back: &node[int]{data: 20}}
 
-// TestBegin tests begin function of the iterator and const_iterator returns the beginning of the list
-func TestBegin(t *testing.T) {
-	n := node[int]{data: 10, next: &node[int]{data: 20, next: &node[int]{data: 30}}, prev: &node[int]{data: 0}}
-	// construct a new list with sentinel nodes
-	list := NewList[int]()
+// it := NewConstIterator(&n, &list)
 
-	it := NewIterator(&n, &list)
-	// begin and end should point to the same sentinel node
-	if it.begin() != it.end() {
-		t.Error("Iterator begin() does not return the correct data")
-	}
-}
+// if it.get() != 10 {
+// t.Errorf("Iterator get() does not return the correct data. Expected %d, got %d", 10, it.get())
+// }
+// it.increment()
+// if it.get() != 20 {
+// t.Errorf("Iterator get() does not return the correct data. Expected %d, got %d", 20, it.get())
+// }
 
-// TestCbegin tests begin function of the iterator and const_iterator returns the beginning of the list
-func TestCbegin(t *testing.T) {
-	n := node[int]{data: 10, next: &node[int]{data: 20, next: &node[int]{data: 30}}, prev: &node[int]{data: 0}}
-	// construct a new list with sentinel nodes
-	list := NewList[int]()
+// it.increment()
+// if it.get() != 30 {
+// t.Errorf("Iterator get() does not return the correct data. Expected %d, got %d", 30, it.get())
+// }
+// }
 
-	it := NewConstIterator(&n, &list)
-	if it.cbegin() != it.cend() {
-		t.Error("Iterator begin() does not return the correct data")
-	}
-}
+// // TestBegin tests begin and end function of the iterator. Should both point to the same sentinel node
+// func TestBegin(t *testing.T) {
+// n := node[int]{data: 10, next: &node[int]{data: 20, next: &node[int]{data: 30}}, prev: &node[int]{data: 0}}
+// // construct a new list with sentinel nodes
+// list := NewList[int]()
+
+// it := NewIterator(&n, &list)
+// // begin and end should point to the same sentinel node
+// if it.begin() != it.end() {
+// t.Error("Iterator begin() does not return the correct data")
+// }
+// }
+
+// // TestCbegin tests cbegin and cend function of the iterator. Should both point to the same sentinel node
+// func TestCbegin(t *testing.T) {
+// n := node[int]{data: 10, next: &node[int]{data: 20, next: &node[int]{data: 30}}, prev: &node[int]{data: 0}}
+// // construct a new list with sentinel nodes
+// list := NewList[int]()
+
+// it := NewConstIterator(&n, &list)
+// if it.cbegin() != it.cend() {
+// t.Error("Iterator begin() does not return the correct data")
+// }
+// }
