@@ -31,7 +31,7 @@ func TestInsert(t *testing.T) {
 	data := makeData()
 	list := NewList[int]()
 	n := &node[int]{data: 20}
-	it := Iterator[int]{MyList: &list, Current: n}
+	it := Iterator[int]{myList: &list, current: n}
 	for i := 0; i < 5; i++ {
 		list.insert(&it, data[i])
 		// if it.get() != data[i] {

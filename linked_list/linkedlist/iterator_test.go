@@ -5,7 +5,7 @@ import "testing"
 // TestIteratorGet tests get function of the iterator returns the correct data inside the iterator
 func TestIteratorGet(t *testing.T) {
 	n := node[int]{data: 10}
-	it := &Iterator[int]{Current: &n}
+	it := &Iterator[int]{current: &n}
 	data := it.get()
 
 	if data != 10 {
@@ -16,7 +16,7 @@ func TestIteratorGet(t *testing.T) {
 // TestIteratorIncreament tests increment function of the iterator increments the iterator to the next node
 func TestIteratorIncreament(t *testing.T) {
 	n := node[int]{data: 10, next: &node[int]{data: 20, next: &node[int]{data: 30}}, prev: &node[int]{data: 0}}
-	it := &Iterator[int]{Current: &n}
+	it := &Iterator[int]{current: &n}
 	if it.get() != 10 {
 		t.Errorf("Iterator get() does not return the correct data. Expected %d, got %d", 10, it.get())
 	}
