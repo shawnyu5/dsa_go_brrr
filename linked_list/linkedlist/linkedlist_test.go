@@ -30,42 +30,16 @@ func TestNewList(t *testing.T) {
 func TestInsert(t *testing.T) {
 	data := makeData()
 	list := NewList[int]()
-	// n := &node[int]{data: 20}
-	it := NewIterator(nil, &list)
+	n := &node[int]{data: 20}
+	it := Iterator[int]{MyList: &list, Current: n}
 	for i := 0; i < 5; i++ {
 		list.insert(&it, data[i])
-		if it.get() != data[i] {
-			t.Errorf("Insert is not inserting the correct data. Expected %d, got %d", data[i], it.get())
-		}
+		// if it.get() != data[i] {
+		// t.Errorf("Insert is not inserting the correct data. Expected %d, got %d", data[i], it.get())
+		// }
 		// TODO: increment the iterator. Other wise, we are adding at the same place every time
 	}
 	if list.NumRecords() != 5 {
 		t.Errorf("Expected 5, got %d", list.numRecords)
 	}
 }
-
-// TestIteratorGet tests get function of the iterator returns the correct data inside the iterator
-func TestIteratorGet(t *testing.T) {
-	n := node[int]{data: 10}
-	it := &Iterator[int]{Current: &n}
-	data := it.get()
-
-	if data != 10 {
-		t.Error("Iterator get() does not return the correct data")
-	}
-}
-
-// // TestNewConstIterator tests the NewConstIterator function returns an Const iterator
-// func TestNewConstIterator(t *testing.T) {
-// iterator := NewConstIterator[int](nil, nil)
-// if iterator.MyList != nil {
-// t.Error("Expected iterator.MyList to be nil")
-// }
-
-// if iterator.Current != nil {
-// t.Error("Expected iterator.Current to be nil")
-// }
-
-// curr := &node[int]{data: 10, next: nil, prev: nil}
-// iterator = NewConstIterator(curr, nil)
-// }
