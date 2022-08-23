@@ -45,4 +45,27 @@ var _ = Describe("Linked list", func() {
 		}
 	})
 
+	It("Decrement should return the correct data", func() {
+		list := linkedlist.NewList[int]()
+		it := list.It.Begin()
+		list.Insert(&it, 1)
+		it.Increment()
+		list.Insert(&it, 2)
+		it.Increment()
+		list.Insert(&it, 3)
+		it.Increment()
+		list.Insert(&it, 4)
+		it.Increment()
+		list.Insert(&it, 5)
+
+		// set the iterator to end of list
+		it = list.It.End()
+		it.Decrement()
+
+		for i := 5; i < 5; i-- {
+			Expect(it.Get()).To(Equal(i))
+			it.Decrement()
+		}
+	})
+
 })
