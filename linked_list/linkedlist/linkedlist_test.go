@@ -68,4 +68,42 @@ var _ = Describe("Linked list", func() {
 		}
 	})
 
+	Context("Search", func() {
+		It("Should return the node data if found", func() {
+			list := linkedlist.NewList[int]()
+			it := list.It.Begin()
+
+			list.Insert(&it, 1)
+			it.Increment()
+			list.Insert(&it, 2)
+			it.Increment()
+			list.Insert(&it, 3)
+			it.Increment()
+			list.Insert(&it, 4)
+			it.Increment()
+			list.Insert(&it, 5)
+
+			foundIt := list.Search(3)
+			Expect(foundIt.Get()).To(Equal(3))
+		})
+
+		It("Did not find the node, should return iterator pointing to end of list", func() {
+			list := linkedlist.NewList[int]()
+			it := list.It.Begin()
+
+			list.Insert(&it, 1)
+			it.Increment()
+			list.Insert(&it, 2)
+			it.Increment()
+			list.Insert(&it, 3)
+			it.Increment()
+			list.Insert(&it, 4)
+			it.Increment()
+			list.Insert(&it, 5)
+
+			foundIt := list.Search(6)
+			Expect(foundIt).To(Equal(list.It.End()))
+
+		})
+	})
 })

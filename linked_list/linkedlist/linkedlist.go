@@ -52,3 +52,24 @@ func (l *LinkedList[T]) Insert(it *Iterator[T], data T) {
 func (l *LinkedList[T]) Size() int {
 	return l.numRecords
 }
+
+// Search searches the list for the data passed in. If the data is found, this function returns an iterator pointing to the node containing the data. Else returns an iterator pointing to the end of the list
+func (l *LinkedList[T]) Search(data T) Iterator[T] {
+	it := l.It.Begin()
+	found := false
+
+	// as long as the next node is not the sentinel node, we keep looking
+	for it.current.next != l.It.End().current {
+		// if we have found the data, return the iterator
+		if it.Get() == data {
+			found = true
+			break
+		}
+		it.Increment()
+	}
+
+	if !found {
+		return l.It.End()
+	}
+	return it
+}
