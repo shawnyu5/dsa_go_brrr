@@ -12,13 +12,13 @@ type Iterator[T comparable] struct {
 	current *node[T]
 }
 
-// NewConstIterator constructs a new Const_iterator
-func NewConstIterator[T comparable](curr *node[T], theList *LinkedList[T]) Const_iterator[T] {
+// newConstIterator constructs a new Const_iterator
+func newConstIterator[T comparable](curr *node[T], theList *LinkedList[T]) Const_iterator[T] {
 	return Const_iterator[T]{myList: theList, current: curr}
 }
 
-// NewIterator constructs a new Iterator
-func NewIterator[T comparable](curr *node[T], theList *LinkedList[T]) Iterator[T] {
+// newIterator constructs a new Iterator
+func newIterator[T comparable](curr *node[T], theList *LinkedList[T]) Iterator[T] {
 	return Iterator[T]{myList: theList, current: curr}
 }
 

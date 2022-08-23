@@ -30,7 +30,7 @@ var _ = Describe("Iterator", func() {
 			// construct a new list with sentinel nodes
 			list := NewList[int]()
 
-			it := NewIterator(&n, &list)
+			it := newIterator(&n, &list)
 			// begin and end should point to the same sentinel node
 			Expect(it.begin()).To(Equal(it.end()))
 		})
@@ -40,7 +40,7 @@ var _ = Describe("Iterator", func() {
 			// construct a new list with sentinel nodes
 			list := NewList[int]()
 
-			it := NewConstIterator(&n, &list)
+			it := newConstIterator(&n, &list)
 			// begin and end should point to the same sentinel node
 			Expect(it.cbegin()).To(Equal(it.cend()))
 		})
