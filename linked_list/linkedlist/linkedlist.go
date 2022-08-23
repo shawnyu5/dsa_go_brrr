@@ -7,6 +7,7 @@ type LinkedList[T comparable] struct {
 	back  *node[T]
 	// number of records in the list
 	numRecords int
+	Ct         Const_iterator[T]
 }
 
 type node[T comparable] struct {
@@ -31,24 +32,18 @@ func (l *LinkedList[T]) begin() node[T] {
 // Insert inserts the data before the node that it is pointing to
 func (l *LinkedList[T]) Insert(it *Iterator[T], data T) {
 	// the node the iterator is pointing to
-	ogNode := it.current
+	insertLocation := it.current
 	// find where the iterator is pointing to
 	// for ogNode.next != nil && ogNode.data != it.get() {
 	// ogNode = *ogNode.next
 	// }
-	fmt.Println(fmt.Sprintf("insert ogNode: %+v", ogNode)) // __AUTO_GENERATED_PRINT_VAR__
 
 	// construct a new node from the data passed in
-	nn := node[T]{data: data, next: ogNode, prev: ogNode.prev}
+	nn := node[T]{data: data, next: insertLocation, prev: insertLocation.prev}
+	fmt.Println(fmt.Sprintf("Insert insertLocation: %+v", insertLocation)) // __AUTO_GENERATED_PRINT_VAR__
 
-	// if we are at the tail, add the new node between front and back sentinel
-	if ogNode.next == nil {
-		l.back.prev.next = &nn
-		l.back.prev = &nn
-	} else { // if we are not at end, insert normally
-		ogNode.prev.next = &nn
-		ogNode.prev = &nn
-	}
+	insertLocation.prev.next = &nn
+	insertLocation.prev = &nn
 	l.numRecords++
 	// move the iterator to the new node
 	it.decrement()
