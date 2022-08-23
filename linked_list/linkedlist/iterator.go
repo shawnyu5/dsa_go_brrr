@@ -22,59 +22,59 @@ func newIterator[T comparable](curr *node[T], theList *LinkedList[T]) Iterator[T
 	return Iterator[T]{myList: theList, current: curr}
 }
 
-// get returns the data from an iterator
-func (it *Iterator[T]) get() T {
+// Get returns the data from an iterator
+func (it *Iterator[T]) Get() T {
 	return it.current.data
 }
 
-// get returns the data from an Const_iterator
-func (it *Const_iterator[T]) get() T {
+// Get returns the data from an Const_iterator
+func (it *Const_iterator[T]) Get() T {
 	return it.current.data
 }
 
-// increment increments the iterator to the next node
-func (it *Iterator[T]) increment() {
-	if it.current.next != nil {
-		it.current = it.current.next
-	}
-}
-
-// begin returns the first node in the list, excluding the sentinel node
-func (it *Iterator[T]) begin() Iterator[T] {
+// Begin returns the first node in the list, excluding the sentinel node
+func (it *Iterator[T]) Begin() Iterator[T] {
 	return Iterator[T]{myList: it.myList, current: it.myList.front.next}
 }
 
-// end returns the last node in the list, the sentinel node
-func (it *Iterator[T]) end() Iterator[T] {
+// End returns the last node in the list, the sentinel node
+func (it *Iterator[T]) End() Iterator[T] {
 	return Iterator[T]{myList: it.myList, current: it.myList.back}
 }
 
-// cbegin returns the first node in the list, excluding the sentinel node
-func (it *Const_iterator[T]) cbegin() Const_iterator[T] {
+// CBegin returns the first node in the list, excluding the sentinel node
+func (it *Const_iterator[T]) CBegin() Const_iterator[T] {
 	return Const_iterator[T]{myList: it.myList, current: it.myList.front.next}
 }
 
-// cend returns the last node in the list, the sentinel node
-func (it *Const_iterator[T]) cend() Const_iterator[T] {
+// CEnd returns the last node in the list, the sentinel node
+func (it *Const_iterator[T]) CEnd() Const_iterator[T] {
 	return Const_iterator[T]{myList: it.myList, current: it.myList.back}
 }
 
-// decrement decrements the Const_iterator to the previous node
-func (it *Const_iterator[T]) decrement() {
+// Decrement decrements the Const_iterator to the previous node
+func (it *Const_iterator[T]) Decrement() {
 	if it.current.prev != nil {
 		it.current = it.current.prev
 	}
 }
 
-// increment increments the Const_iterator to the next node
-func (it *Const_iterator[T]) increment() {
+// Increment increments the Const_iterator to the next node
+func (it *Const_iterator[T]) Increment() {
 	if it.current.next != nil {
 		it.current = it.current.next
 	}
 }
 
-// decrement decrements the iterator to the previous node
-func (it *Iterator[T]) decrement() {
+// Increment increments the iterator to the next node
+func (it *Iterator[T]) Increment() {
+	if it.current.next != nil {
+		it.current = it.current.next
+	}
+}
+
+// Decrement decrements the iterator to the previous node
+func (it *Iterator[T]) Decrement() {
 	if it.current.prev != nil {
 		it.current = it.current.prev
 	}
