@@ -1,45 +1,44 @@
 package linkedlist
 
-import "testing"
+import (
+	. "github.com/onsi/ginkgo/v2"
+	. "github.com/onsi/gomega"
+)
 
-// makeData creates and returns an array of data for testing
-func makeData() [5]int {
-	data := make([]int, 5)
-	expected := [5]int{0, 1, 2, 3, 4}
+var _ = Describe("Linked list", func() {
+	data := [5]int{1, 2, 3, 4, 5}
 
-	for i := 0; i < 5; i++ {
-		data[i] = expected[i]
-	}
+	It("should create a new list with sentinel nodes", func() {
+		list := NewList[int]()
+		// front next should point to the back sentinel node
+		Expect(list.front.next).To(Equal(list.back))
+		// back prev should point to the front sentinel node
+		Expect(list.back.prev).To(Equal(list.front))
+	})
 
-	return expected
-}
+	It("Should insert the correct number of records", func() {
+		list := NewList[int]()
+		begin := list.begin()
+		it := NewIterator(&begin, &list)
+		for i := 0; i < 5; i++ {
+			GinkgoWriter.Printf("Inserting %d\n", data[i])
+			list.insert(&it, data[i])
+			// Expect(it.get()).To(Equal(data[i]))
+			it.increment()
+		}
+		Expect(list.size()).To(Equal(5))
+	})
 
-// TestNewList tests the NewList function returns a LinkedList with sentinel nodes, and the front and back nodes are pointing to the right nodes
-func TestNewList(t *testing.T) {
-	list := NewList[int]()
-	if list.front.next != list.back {
-		t.Error("Front is not set to back")
-	}
+	It("Should insert the correct nodes", func() {
+		list := NewList[int]()
+		begin := list.begin()
+		it := NewIterator(&begin, &list)
+		for i := 0; i < 5; i++ {
+			GinkgoWriter.Printf("Inserting %d\n", data[i])
+			list.insert(&it, data[i])
+			Expect(it.get()).To(Equal(data[i]))
+			it.increment()
+		}
+	})
 
-	if list.back.prev != list.front {
-		t.Error("back prev is not set to front")
-	}
-}
-
-// TestInsert tests insert function returns the correct number of records
-func TestInsert(t *testing.T) {
-	data := makeData()
-	list := NewList[int]()
-	n := &node[int]{data: 20}
-	it := Iterator[int]{myList: &list, current: n}
-	for i := 0; i < 5; i++ {
-		list.insert(&it, data[i])
-		// if it.get() != data[i] {
-		// t.Errorf("Insert is not inserting the correct data. Expected %d, got %d", data[i], it.get())
-		// }
-		// TODO: increment the iterator. Other wise, we are adding at the same place every time
-	}
-	if list.size() != 5 {
-		t.Errorf("Expected 5, got %d", list.numRecords)
-	}
-}
+})
