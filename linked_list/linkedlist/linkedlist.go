@@ -1,5 +1,7 @@
 package linkedlist
 
+import "fmt"
+
 type LinkedList[T comparable] struct {
 	front *node[T]
 	back  *node[T]
@@ -21,26 +23,35 @@ func NewList[T comparable]() LinkedList[T] {
 	return list
 }
 
-// insert inserts the data before the node that is refered to by it
+// begin returns the first node in the list, excluding the sentinel node
+func (l *LinkedList[T]) begin() node[T] {
+	return *l.front.next
+}
+
+// insert inserts the data before the node that it is pointing to
 func (l *LinkedList[T]) insert(it *Iterator[T], data T) {
 	// the starting node
-	ogNode := l.front.next
+	ogNode := l.begin()
 	// find where the iterator is pointing to
 	for ogNode.next != nil && ogNode.data != it.get() {
-		ogNode = ogNode.next
+		ogNode = *ogNode.next
 	}
+	fmt.Println(fmt.Sprintf("insert ogNode: %+v", ogNode)) // __AUTO_GENERATED_PRINT_VAR__
 
 	// construct a new node from the data passed in
-	nn := node[T]{data: data, next: ogNode.next, prev: ogNode.prev}
+	nn := node[T]{data: data, next: &ogNode, prev: ogNode.prev}
 
+	// if we are at the tail, add the new node between front and back sentinel
 	if ogNode.next == nil {
 		l.back.prev.next = &nn
 		l.back.prev = &nn
-	} else {
+	} else { // if we are not at end, insert normally
 		ogNode.prev.next = &nn
 		ogNode.prev = &nn
 	}
 	l.numRecords++
+	// move the iterator to the new node
+	it.decrement()
 }
 
 // size returns the number of records in the list
