@@ -19,10 +19,9 @@ var _ = Describe("Linked list", func() {
 	It("Should insert the correct number of records", func() {
 		list := NewList[int]()
 		begin := list.begin()
-		it := NewIterator(&begin, &list)
+		it := newIterator(&begin, &list)
 		for i := 0; i < 5; i++ {
-			GinkgoWriter.Printf("Inserting %d\n", data[i])
-			list.insert(&it, data[i])
+			list.Insert(&it, data[i])
 			// Expect(it.get()).To(Equal(data[i]))
 			it.increment()
 		}
@@ -32,10 +31,10 @@ var _ = Describe("Linked list", func() {
 	It("Should insert the correct nodes", func() {
 		list := NewList[int]()
 		begin := list.begin()
-		it := NewIterator(&begin, &list)
+		it := newIterator(&begin, &list)
 		for i := 0; i < 5; i++ {
 			GinkgoWriter.Printf("Inserting %d\n", data[i])
-			list.insert(&it, data[i])
+			list.Insert(&it, data[i])
 			Expect(it.get()).To(Equal(data[i]))
 			it.increment()
 		}
