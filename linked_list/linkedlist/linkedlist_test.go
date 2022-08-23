@@ -106,4 +106,49 @@ var _ = Describe("Linked list", func() {
 
 		})
 	})
+
+	Context("Sort", func() {
+		It("Split should split the list in half with odd number of elements", func() {
+			list := linkedlist.NewList[int]()
+			it := list.It.Begin()
+
+			list.Insert(&it, 1)
+			it.Increment()
+			list.Insert(&it, 2)
+			it.Increment()
+			list.Insert(&it, 3)
+			it.Increment()
+			list.Insert(&it, 4)
+			it.Increment()
+			list.Insert(&it, 5)
+
+			// second half starts at 4
+			// first half should be bigger than second half
+			firstHalf, secondHalf := list.Split(&list)
+
+			Expect(firstHalf.Get()).To(Equal(1))
+			Expect(secondHalf.Get()).To(Equal(4))
+		})
+		It("Split should split the list in half with even number of elements", func() {
+			list := linkedlist.NewList[int]()
+			it := list.It.Begin()
+
+			list.Insert(&it, 1)
+			it.Increment()
+			list.Insert(&it, 2)
+			it.Increment()
+			list.Insert(&it, 3)
+			it.Increment()
+			list.Insert(&it, 4)
+			it.Increment()
+			list.Insert(&it, 5)
+			it.Increment()
+			list.Insert(&it, 6)
+
+			firstHalf, secondHalf := list.Split(&list)
+
+			Expect(firstHalf.Get()).To(Equal(1))
+			Expect(secondHalf.Get()).To(Equal(4))
+		})
+	})
 })
