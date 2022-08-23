@@ -75,9 +75,9 @@ func (l *LinkedList[T]) Search(data T) Iterator[T] {
 }
 
 // Split splits the list into two halves, returns 2 iterators pointing to the beginning of each half
-func (l *LinkedList[T]) Split(list *LinkedList[T]) (Iterator[T], Iterator[T]) {
-	midPoint := l.It.Begin()
-	nav := l.It.Begin()
+func (l *LinkedList[T]) Split(begin Iterator[T], end Iterator[T]) (Iterator[T], Iterator[T]) {
+	midPoint := begin
+	nav := begin
 	nav.Increment() // nav is one ahead of midPoint
 
 	for nav != l.It.End() {
@@ -92,4 +92,12 @@ func (l *LinkedList[T]) Split(list *LinkedList[T]) (Iterator[T], Iterator[T]) {
 	return l.It.Begin(), midPoint
 }
 
-func (l *LinkedList[T]) Sort(list1 *LinkedList[T], list2 *LinkedList[T]) {}
+// TODO: implement merge sort later
+func (l *LinkedList[T]) Sort(first *Iterator[T], last *Iterator[T]) {
+	// firstHalf, secondHalf := l.Split(*first, *last)
+
+}
+
+func (l *LinkedList[T]) mergeSort(n node[T]) {
+
+}

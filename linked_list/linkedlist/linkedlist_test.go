@@ -124,11 +124,14 @@ var _ = Describe("Linked list", func() {
 
 			// second half starts at 4
 			// first half should be bigger than second half
-			firstHalf, secondHalf := list.Split(&list)
+			begin := list.It.Begin()
+			end := list.It.End()
+			firstHalf, secondHalf := list.Split(begin, end)
 
 			Expect(firstHalf.Get()).To(Equal(1))
 			Expect(secondHalf.Get()).To(Equal(4))
 		})
+
 		It("Split should split the list in half with even number of elements", func() {
 			list := linkedlist.NewList[int]()
 			it := list.It.Begin()
@@ -145,7 +148,9 @@ var _ = Describe("Linked list", func() {
 			it.Increment()
 			list.Insert(&it, 6)
 
-			firstHalf, secondHalf := list.Split(&list)
+			begin := list.It.Begin()
+			end := list.It.End()
+			firstHalf, secondHalf := list.Split(begin, end)
 
 			Expect(firstHalf.Get()).To(Equal(1))
 			Expect(secondHalf.Get()).To(Equal(4))
