@@ -92,9 +92,40 @@ func (l *LinkedList[T]) Split(begin Iterator[T], end Iterator[T]) (Iterator[T], 
 	return l.It.Begin(), midPoint
 }
 
+// Erase erases the node that the iterator is pointing to. And returns an iterator pointing to the next node
+func (l *LinkedList[T]) Erase(it Iterator[T]) Iterator[T] {
+	found := false
+	rmPosition := l.It.Begin()
+
+	// look till the end of the list
+	for !found && rmPosition != l.It.End() {
+		if it == rmPosition {
+			found = true
+			break
+		} else {
+			rmPosition.Increment()
+		}
+	}
+
+	if found {
+		current := rmPosition.current
+		prev := current.prev
+		next := current.next
+
+		prev.next = next
+		next.prev = prev
+
+		it.Increment()
+		current = nil
+		l.numRecords--
+	}
+
+	return it
+}
+
 // TODO: implement merge sort later
 func (l *LinkedList[T]) Sort(first *Iterator[T], last *Iterator[T]) {
-	// firstHalf, secondHalf := l.Split(*first, *last)
+	panic("Not implemented")
 
 }
 
