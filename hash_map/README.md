@@ -1,5 +1,3 @@
-## Due: July 18, 2022
-
 <!-- vim-markdown-toc GFM -->
 
 -  [Overview](#overview)
