@@ -14,4 +14,13 @@ var _ = Describe("LPTable", func() {
 			Expect(hash).ToNot(BeNil())
 		})
 	})
+
+	Context("new table", func() {
+		It("can create a new table", func() {
+			table := hashmap.NewLPTable[int](10)
+			Expect(table).ToNot(BeNil())
+			Expect(table.Capacity).To(Equal(10))
+			Expect(table.NumRecords).To(Equal(0))
+		})
+	})
 })

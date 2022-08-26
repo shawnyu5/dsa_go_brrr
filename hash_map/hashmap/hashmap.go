@@ -30,8 +30,6 @@ type hashTable[T comparable] struct {
 // hash table using linear probing as the collision resolution strategy
 type lpTable[T comparable] struct {
 	hashTable[T]
-	// capability of the table
-	capability int
 	// number of records in the table
 	numRecords int
 	front      *record[T]
@@ -43,4 +41,11 @@ func Hash(key string) hash.Hash {
 	hash := sha256.New()
 	hash.Write([]byte(key))
 	return hash
+}
+
+// NewLPTable constructs a new lpTable with the given capacity
+func NewLPTable[T comparable](capacity int) lpTable[T] {
+	table := lpTable[T]{}
+	table.Capacity = capacity
+	return table
 }
