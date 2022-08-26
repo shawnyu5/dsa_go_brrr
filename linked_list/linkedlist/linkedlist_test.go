@@ -86,28 +86,34 @@ var _ = Describe("Linked list", func() {
 	})
 
 	Context("Sort", func() {
-		It("Split should split the list in half with odd number of elements", func() {
+		It("Should sort the list", func() {
 			list := createLinkedList()
-			// second half starts at 4
-			// first half should be bigger than second half
 			begin := list.It.Begin()
 			end := list.It.End()
-			firstHalf, secondHalf := list.Split(begin, end)
-
-			Expect(firstHalf.Get()).To(Equal(1))
-			Expect(secondHalf.Get()).To(Equal(4))
+			list.Sort(&begin, &end)
 		})
+		// It("Split should split the list in half with odd number of elements", func() {
+		// list := createLinkedList()
+		// // second half starts at 4
+		// // first half should be bigger than second half
+		// begin := list.It.Begin()
+		// end := list.It.End()
+		// firstHalf, secondHalf := list.Split(begin, end)
 
-		It("Split should split the list in half with even number of elements", func() {
-			list := createLinkedList()
+		// Expect(firstHalf.Get()).To(Equal(1))
+		// Expect(secondHalf.Get()).To(Equal(4))
+		// })
 
-			begin := list.It.Begin()
-			end := list.It.End()
-			firstHalf, secondHalf := list.Split(begin, end)
+		// It("Split should split the list in half with even number of elements", func() {
+		// list := createLinkedList()
 
-			Expect(firstHalf.Get()).To(Equal(1))
-			Expect(secondHalf.Get()).To(Equal(4))
-		})
+		// begin := list.It.Begin()
+		// end := list.It.End()
+		// firstHalf, secondHalf := list.Split(begin, end)
+
+		// Expect(firstHalf.Get()).To(Equal(1))
+		// Expect(secondHalf.Get()).To(Equal(4))
+		// })
 	})
 
 	Context("erase", func() {
@@ -119,7 +125,6 @@ var _ = Describe("Linked list", func() {
 			Expect(list.Search(3)).To(Equal(list.It.End()))
 			// the size of the list should also shrink
 			Expect(list.Size()).To(Equal(5))
-
 		})
 	})
 })

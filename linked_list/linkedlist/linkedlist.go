@@ -74,24 +74,6 @@ func (l *LinkedList[T]) Search(data T) Iterator[T] {
 	return it
 }
 
-// Split splits the list into two halves, returns 2 iterators pointing to the beginning of each half
-func (l *LinkedList[T]) Split(begin Iterator[T], end Iterator[T]) (Iterator[T], Iterator[T]) {
-	midPoint := begin
-	nav := begin
-	nav.Increment() // nav is one ahead of midPoint
-
-	for nav != l.It.End() {
-		nav.Increment()
-		if nav != l.It.End() {
-			midPoint.Increment()
-			nav.Increment()
-		}
-	}
-
-	midPoint.Increment()
-	return l.It.Begin(), midPoint
-}
-
 // Erase erases the node that the iterator is pointing to. And returns an iterator pointing to the next node
 func (l *LinkedList[T]) Erase(it Iterator[T]) Iterator[T] {
 	found := false
@@ -123,12 +105,34 @@ func (l *LinkedList[T]) Erase(it Iterator[T]) Iterator[T] {
 	return it
 }
 
-// TODO: implement merge sort later
-func (l *LinkedList[T]) Sort(first *Iterator[T], last *Iterator[T]) {
-	panic("Not implemented")
+// split splits the list into two halves, returns 2 iterators pointing to the beginning of each half
+func (l *LinkedList[T]) split(begin Iterator[T], end Iterator[T]) (Iterator[T], Iterator[T]) {
+	midPoint := begin
+	nav := begin
+	nav.Increment() // nav is one ahead of midPoint
 
+	for nav != l.It.End() {
+		nav.Increment()
+		if nav != l.It.End() {
+			midPoint.Increment()
+			nav.Increment()
+		}
+	}
+
+	midPoint.Increment()
+	return l.It.Begin(), midPoint
 }
 
-func (l *LinkedList[T]) mergeSort(n node[T]) {
+// TODO: implement merge sort later
+func (l *LinkedList[T]) Sort(first *Iterator[T], last *Iterator[T]) {
+	panic("not implemented")
+	// firstHalf, secondHalf := l.split(*first, *last)
+	// l.Sort(&firstHalf, &secondHalf)
+	// end := secondHalf.End()
+	// l.Sort(&firstHalf, &end)
+}
 
+// mergeSort performs merge sort on 2 lists
+func (l *LinkedList[T]) mergeSort(n node[T]) {
+	// sortedList := NewList[T]()
 }
