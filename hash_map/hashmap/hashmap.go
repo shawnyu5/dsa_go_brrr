@@ -13,12 +13,18 @@ type record[T comparable] struct {
 
 // base hash table to drive other hash tables from
 type hashTable[T comparable] struct {
-	Update     func(string, T) bool
-	Remove     func(string) bool
-	Find       func(string) bool
+	// updates a record in the table with the given key and data
+	Update func(string, T) bool
+	// removes a record from the table with the given key
+	Remove func(string) bool
+	// find a record in the table with the given key
+	Find func(string) bool
+	// number of records in the table
 	NumRecords int
-	IsEmpty    func() bool
-	Capacity   int
+	// weather the table is empty
+	IsEmpty func() bool
+	// maximum number of records allowed in the table
+	Capacity int
 }
 
 // hash table using linear probing as the collision resolution strategy
