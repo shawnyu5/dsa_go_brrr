@@ -7,7 +7,7 @@ import (
 	. "github.com/onsi/gomega"
 )
 
-var _ = Describe("Hashmap", func() {
+var _ = Describe("LPTable", func() {
 	Context("Hash()", func() {
 		It("should return a hash object from a string", func() {
 			hash := hashmap.Hash("hello")
