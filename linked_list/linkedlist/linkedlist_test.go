@@ -95,21 +95,26 @@ var _ = Describe("Linked list", func() {
 			firstHalf, mid, endPos := list.Split(begin, end)
 
 			Expect(firstHalf.Get()).To(Equal(1)) // first half should start at 1
-			Expect(mid.Get()).To(Equal(3))       // second half should start at 4
+			Expect(mid.Get()).To(Equal(4))       // middle should be 3
 			Expect(endPos.Get()).To(Equal(6))    // list should end at 6
 
 		})
-		// It("Split should split the list in half with odd number of elements", func() {
-		// list := createLinkedList()
-		// // second half starts at 4
-		// // first half should be bigger than second half
-		// begin := list.It.Begin()
-		// end := list.It.End()
-		// firstHalf, secondHalf := list.Split(begin, end)
+		It("Split should split the list in half with odd number of elements", func() {
+			list := createLinkedList()
 
-		// Expect(firstHalf.Get()).To(Equal(1))
-		// Expect(secondHalf.Get()).To(Equal(4))
-		// })
+			// second half starts at 3
+			// first half should be bigger than second half
+			begin := list.It.Begin()
+			end := list.It.End()
+			end.Decrement()
+			end.Decrement() // list ends at 5
+
+			first, mid, endPos := list.Split(begin, end)
+
+			Expect(first.Get()).To(Equal(1))
+			Expect(mid.Get()).To(Equal(3))
+			Expect(endPos.Get()).To(Equal(5))
+		})
 
 		// It("Split should split the list in half with even number of elements", func() {
 		// list := createLinkedList()

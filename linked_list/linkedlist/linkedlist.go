@@ -119,6 +119,7 @@ func (l *LinkedList[T]) Split(begin Iterator[T], end Iterator[T]) (Iterator[T], 
 			nav.Increment()
 		}
 	}
+	midPoint.Increment()
 
 	return begin, midPoint, end
 }
@@ -126,10 +127,11 @@ func (l *LinkedList[T]) Split(begin Iterator[T], end Iterator[T]) (Iterator[T], 
 // TODO: implement merge sort later
 func (l *LinkedList[T]) Sort(first *Iterator[T], last *Iterator[T]) {
 	panic("not implemented")
-	// firstHalf, secondHalf := l.split(*first, *last)
-	// l.Sort(&firstHalf, &secondHalf)
-	// end := secondHalf.End()
-	// l.Sort(&firstHalf, &end)
+	begin, mid, end := l.Split(*first, *last)
+
+	for begin != mid {
+		end = end
+	}
 }
 
 // mergeSort performs merge sort on 2 lists
