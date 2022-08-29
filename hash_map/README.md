@@ -105,8 +105,7 @@ probing for collision resolution, the other will use chaining.
 
 ### LPTable
 
-LPTable is a hash table that uses linear probing as the collision resolution
-method.
+LPTable is a hash table that uses linear probing as the collision resolution method.
 
 The constructor for the LPTable accepts one argument
 
@@ -122,14 +121,9 @@ LPTable(size_t capacity);
 bool update(const string& key, const TYPE& value);
 ```
 
-This function is passed a key-value pair. If your table already has a record
-with a matching key, the record's value is replaced by the value passed to this
-function. If no record exists, a record with key-value pair is added to the
-table.
+This function is passed a key-value pair. If your table already has a record with a matching key, the record's value is replaced by the value passed to this function. If no record exists, a record with key-value pair is added to the table.
 
-The table can only hold capacity - 1 records (need 1 open spot minimum). adding
-a new record to a table that already has capacity - 1 records will result in an
-unsuccessful operation. The new record is not to be added.
+The table can only hold capacity - 1 records (need 1 open spot minimum). adding a new record to a table that already has capacity - 1 records will result in an unsuccessful operation. The new record is not to be added.
 
 Function returns true if update() was successful, false otherwise.
 
@@ -139,10 +133,7 @@ Function returns true if update() was successful, false otherwise.
 bool find(const string& key,TYPE& value );
 ```
 
-This function is passed a key and a reference for passing back a found value. If
-your table contains a record with a matching key, the function returns true, and
-passes back the value from the record. If it does not find a record with a
-matching key, function returns false.
+This function is passed a key and a reference for passing back a found value. If your table contains a record with a matching key, the function returns true, and passes back the value from the record. If it does not find a record with a matching key, function returns false.
 
 ---
 
@@ -150,8 +141,7 @@ matching key, function returns false.
 bool remove(const string& key);
 ```
 
-This function is passed a key. If your table contains a record with a matching
-key, the record (both the key and the value) is removed from the table
+This function is passed a key. If your table contains a record with a matching key, the record (both the key and the value) is removed from the table
 
 ---
 
@@ -193,10 +183,7 @@ This function returns the load factor of the table. (number of records divided b
 
 ChainingTable is a hash table that uses chaining as the collision resolution method.
 
-It is recommended that you use your assignment 1 linked list to help you in this
-part of the assignment. To do so, set up a struct for to combine your key-value
-pairs into a single object. Then add ==, !=, and < comparison operators to
-compare these according to its key
+It is recommended that you use your assignment 1 linked list to help you in this part of the assignment. To do so, set up a struct for to combine your key-value pairs into a single object. Then add ==, !=, and < comparison operators to compare these according to its key
 
 The constructor for the ChainingTable accepts one argument
 
@@ -212,10 +199,7 @@ ChainingTable(size_t capacity);
 bool update(const string& key, const TYPE& value);
 ```
 
-This function is passed a key-value pair. If your table already has a record
-with a matching key, the record's value is replaced by the value passed to this
-function. If no record exists, a record with key-value pair is added to the
-table.
+This function is passed a key-value pair. If your table already has a record with a matching key, the record's value is replaced by the value passed to this function. If no record exists, a record with key-value pair is added to the table.
 
 This function always returns true if operation was successful, false otherwise
 
