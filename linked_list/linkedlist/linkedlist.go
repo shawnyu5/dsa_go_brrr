@@ -106,7 +106,7 @@ func (l *LinkedList[T]) Erase(it Iterator[T]) Iterator[T] {
 }
 
 // split splits the list into two halves, returns 2 iterators pointing to the beginning of each half
-func (l *LinkedList[T]) split(begin Iterator[T], end Iterator[T]) (Iterator[T], Iterator[T]) {
+func (l *LinkedList[T]) Split(begin Iterator[T], end Iterator[T]) (Iterator[T], Iterator[T]) {
 	midPoint := begin
 	nav := begin
 	nav.Increment() // nav is one ahead of midPoint
