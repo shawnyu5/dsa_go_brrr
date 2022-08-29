@@ -1,6 +1,8 @@
 package linkedlist_test
 
 import (
+	"fmt"
+
 	"github.com/shawnyu5/linked_list/linkedlist"
 
 	. "github.com/onsi/ginkgo/v2"
@@ -96,6 +98,17 @@ var _ = Describe("Linked list", func() {
 
 			Expect(firstHalf.Get()).To(Equal(1))
 			Expect(secondHalf.Get()).To(Equal(4))
+
+			for firstHalf != secondHalf {
+				fmt.Printf("First half: %d\n", firstHalf.Get())
+				firstHalf.Increment()
+			}
+
+			for secondHalf != end {
+				fmt.Printf("Second half: %d\n", secondHalf.Get())
+				secondHalf.Increment()
+			}
+
 		})
 
 		It("Split should split the list in half with even number of elements", func() {
