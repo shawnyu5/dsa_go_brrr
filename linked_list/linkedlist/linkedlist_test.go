@@ -1,8 +1,6 @@
 package linkedlist_test
 
 import (
-	"fmt"
-
 	"github.com/shawnyu5/linked_list/linkedlist"
 
 	. "github.com/onsi/ginkgo/v2"
@@ -92,20 +90,13 @@ var _ = Describe("Linked list", func() {
 			list := createLinkedList()
 			begin := list.It.Begin()
 			end := list.It.End()
-			firstHalf, secondHalf := list.Split(begin, end)
+			end.Decrement() // exculude the sentinel node, for split
 
-			Expect(firstHalf.Get()).To(Equal(1))
-			Expect(secondHalf.Get()).To(Equal(4))
+			firstHalf, mid, endPos := list.Split(begin, end)
 
-			for firstHalf != secondHalf {
-				fmt.Printf("First half: %d\n", firstHalf.Get())
-				firstHalf.Increment()
-			}
-
-			for secondHalf != end {
-				fmt.Printf("Second half: %d\n", secondHalf.Get())
-				secondHalf.Increment()
-			}
+			Expect(firstHalf.Get()).To(Equal(1)) // first half should start at 1
+			Expect(mid.Get()).To(Equal(3))       // second half should start at 4
+			Expect(endPos.Get()).To(Equal(6))    // list should end at 6
 
 		})
 		// It("Split should split the list in half with odd number of elements", func() {

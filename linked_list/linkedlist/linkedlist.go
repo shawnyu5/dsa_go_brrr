@@ -105,22 +105,22 @@ func (l *LinkedList[T]) Erase(it Iterator[T]) Iterator[T] {
 	return it
 }
 
-// split splits the list into two halves, returns 2 iterators pointing to the beginning of each half
-func (l *LinkedList[T]) Split(begin Iterator[T], end Iterator[T]) (Iterator[T], Iterator[T]) {
+// split accepts 2 iterators pointing to the begining and end of the list, EXCLUDING sentinels
+// It splits the list into two halves, returns 3 iterators, pointing to the beginning, middle, and end of the list
+func (l *LinkedList[T]) Split(begin Iterator[T], end Iterator[T]) (Iterator[T], Iterator[T], Iterator[T]) {
 	midPoint := begin
 	nav := begin
 	nav.Increment() // nav is one ahead of midPoint
 
-	for nav != l.It.End() {
+	for nav != end {
 		nav.Increment()
-		if nav != l.It.End() {
+		if nav != end {
 			midPoint.Increment()
 			nav.Increment()
 		}
 	}
 
-	midPoint.Increment()
-	return l.It.Begin(), midPoint
+	return begin, midPoint, end
 }
 
 // TODO: implement merge sort later
