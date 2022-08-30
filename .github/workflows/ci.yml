@@ -18,8 +18,22 @@ jobs:
       with:
         go-version: 1.18
 
-    - name: Build
-      run: go build -v ./...
+    - name: Build linked list 
+      run: |
+        cd linked_list
+        go build -v ./...
 
-    - name: Test
-      run: go test -v ./...
+    - name: Test linked list
+      run: | 
+        cd linked_list
+        go test -v ./...
+      
+    - name: Build hash map
+      run: |
+        cd hash_map
+        go build -v ./...
+      
+    - name: Test hash map
+      run: |
+        cd hash_map
+        go test -v ./...
