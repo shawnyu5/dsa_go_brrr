@@ -86,7 +86,7 @@ var _ = Describe("Linked list", func() {
 	})
 
 	Context("Sort", func() {
-		It("Should sort the list", func() {
+		It("Split should split the list in half with even number of elements", func() {
 			list := createLinkedList()
 			begin := list.It.Begin()
 			end := list.It.End()
@@ -115,17 +115,6 @@ var _ = Describe("Linked list", func() {
 			Expect(mid.Get()).To(Equal(3))
 			Expect(endPos.Get()).To(Equal(5))
 		})
-
-		// It("Split should split the list in half with even number of elements", func() {
-		// list := createLinkedList()
-
-		// begin := list.It.Begin()
-		// end := list.It.End()
-		// firstHalf, secondHalf := list.Split(begin, end)
-
-		// Expect(firstHalf.Get()).To(Equal(1))
-		// Expect(secondHalf.Get()).To(Equal(4))
-		// })
 	})
 
 	Context("erase", func() {

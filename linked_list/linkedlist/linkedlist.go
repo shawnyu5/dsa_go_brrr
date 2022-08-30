@@ -1,6 +1,8 @@
 package linkedlist
 
-type LinkedList[T comparable] struct {
+import "golang.org/x/exp/constraints"
+
+type LinkedList[T constraints.Ordered] struct {
 	front *node[T]
 	back  *node[T]
 	// number of records in the list
@@ -11,14 +13,14 @@ type LinkedList[T comparable] struct {
 	It Iterator[T]
 }
 
-type node[T comparable] struct {
+type node[T constraints.Ordered] struct {
 	data T
 	next *node[T]
 	prev *node[T]
 }
 
 // NewList constructs a new LinkedList with sentinel nodes
-func NewList[T comparable]() LinkedList[T] {
+func NewList[T constraints.Ordered]() LinkedList[T] {
 	list := LinkedList[T]{front: &node[T]{}, back: &node[T]{}}
 	list.front.next = list.back
 	list.back.prev = list.front
@@ -126,11 +128,23 @@ func (l *LinkedList[T]) Split(begin Iterator[T], end Iterator[T]) (Iterator[T], 
 
 // TODO: implement merge sort later
 func (l *LinkedList[T]) Sort(first *Iterator[T], last *Iterator[T]) {
-	panic("not implemented")
 	begin, mid, end := l.Split(*first, *last)
 
-	for begin != mid {
-		end = end
+	list1 := begin
+	list2 := mid
+	begin.Increment()
+	mid.Increment()
+	list1Next := begin
+	list2Next := mid
+
+	for begin != end {
+		// if curr2 lies in between curr1 and next1
+		// then do curr1->curr2->next1
+		// if ((curr2->data) >= (curr1->data)
+		// && (curr2->data) <= (next1->data)) {
+
+		if list2.Get() >= list1.Get() && list2.Get() <= list1Next.Get() {
+		}
 	}
 }
 
