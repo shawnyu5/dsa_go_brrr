@@ -1,6 +1,10 @@
 package linkedlist
 
-import "golang.org/x/exp/constraints"
+import (
+	"fmt"
+
+	"golang.org/x/exp/constraints"
+)
 
 type LinkedList[T constraints.Ordered] struct {
 	front *node[T]
@@ -127,7 +131,7 @@ func (l *LinkedList[T]) Split(begin Iterator[T], end Iterator[T]) (Iterator[T], 
 }
 
 // TODO: implement merge sort later
-func (l *LinkedList[T]) Sort(first *Iterator[T], last *Iterator[T]) {
+func (l *LinkedList[T]) Sort(first *Iterator[T], last *Iterator[T]) *LinkedList[T] {
 	begin, mid, end := l.Split(*first, *last)
 
 	list1 := begin
@@ -139,13 +143,37 @@ func (l *LinkedList[T]) Sort(first *Iterator[T], last *Iterator[T]) {
 
 	for begin != end {
 		// if curr2 lies in between curr1 and next1
-		// then do curr1->curr2->next1
-		// if ((curr2->data) >= (curr1->data)
-		// && (curr2->data) <= (next1->data)) {
-
 		if list2.Get() >= list1.Get() && list2.Get() <= list1Next.Get() {
+			list2.Increment()
+			list2Next = list2
+			list2.Decrement()
+
+			list1.current.next = list2.current
+			list2.current.next = list1Next.current
+
+			list1 = list2
+			list2 = list2Next
+		} else {
+			// // if more nodes in first list
+			// if (next1->next) {
+			// next1 = next1->next;
+			// curr1 = curr1->next;
+			// }
+
+			if list1Next.current.next != nil {
+				fmt.Println("Sort") // __AUTO_GENERATED_PRINTF__
+				list1Next.Increment()
+				list1.Increment()
+
+			} else { // else point the last node of first list to the remaining nodes of second list
+
+				list1Next.current.next = list2.current
+				return l
+			}
 		}
 	}
+
+	return l
 }
 
 // mergeSort performs merge sort on 2 lists

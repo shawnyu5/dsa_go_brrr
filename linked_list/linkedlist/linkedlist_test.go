@@ -115,6 +115,14 @@ var _ = Describe("Linked list", func() {
 			Expect(mid.Get()).To(Equal(3))
 			Expect(endPos.Get()).To(Equal(5))
 		})
+
+		It("Should sort the list", func() {
+			list := createLinkedList()
+			begin := list.It.Begin()
+			end := list.It.End()
+			end.Decrement()
+			list.Sort(&begin, &end)
+		})
 	})
 
 	Context("erase", func() {
