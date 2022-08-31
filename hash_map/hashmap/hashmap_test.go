@@ -46,6 +46,30 @@ var _ = Describe("LPTable", func() {
 			Expect(table).ToNot(BeNil())
 			Expect(table.Capacity).To(Equal(10))
 			Expect(table.NumRecords).To(Equal(0))
+
+			// for _, v := range table.records {
+			// }
+		})
+	})
+
+	Context("Update()", func() {
+		It("should insert a single record", func() {
+			table := hashmap.NewLPTable[int](10)
+			table.Update("hello", 1)
+			Expect(table.NumRecords).To(Equal(1))
+		})
+
+		It("should insert a bunch of records", func() {
+			keys := createData()
+			table := hashmap.NewLPTable[int](10)
+			Expect(table.IsEmpty()).To(BeTrue()) // table should be empty to begin with
+			Expect(table.Capacity).To(Equal(10))
+
+			for i := 0; i < 10; i++ {
+				Expect(table.Update(keys[i], i)).To(BeTrue())
+				Expect(table.NumRecords).To(Equal(i + 1))
+			}
+			Expect(table.IsEmpty()).To(BeFalse())
 		})
 	})
 })
