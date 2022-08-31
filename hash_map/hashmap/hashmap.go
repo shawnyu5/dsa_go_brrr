@@ -71,9 +71,8 @@ func (lp *lpTable[T]) Update(key string, value T) bool {
 		for hsh < uint32(lp.Capacity) &&
 			!lp.records[hsh].isEmpty &&
 			lp.records[hsh].key != key {
-
 			hsh++
-			hsh = hsh + 1%uint32(lp.Capacity) // treat the table as a circular array, when we reach the end, go back to the beginning
+			hsh = (hsh + 1) % uint32(lp.Capacity) // treat the table as a circular array, when we reach the end, go back to the beginning
 			// i = (1 + i) % lp.Capacity
 		}
 	}
@@ -85,4 +84,30 @@ func (lp *lpTable[T]) Update(key string, value T) bool {
 	lp.records[hsh] = r
 	lp.NumRecords++
 	return true
+}
+
+// Find finds a record in the table with the given key, and assign the value to value passed in. Returns true if the record is found, false otherwise
+func (lp *lpTable[T]) Find(key string) (bool, T) {
+	startingHash := Hash(key) % uint32(lp.Capacity)
+
+	// if current index contains the key we are looking for, return
+	if lp.records[startingHash].key == key {
+		return true, lp.records[startingHash].data
+	}
+
+	// start at the next hash over, while keeping track of the old hash
+	hash := startingHash + 1
+	// keep looking until we find the key we are looking for. If we've made a full circle, then we havent found anything
+	for hash != uint32(lp.Capacity) && key != lp.records[hash].key && hash != startingHash {
+		hash++
+		hash = (hash + 1) % uint32(lp.Capacity) // treat the table as a circular array, when we reach the end, go back to the beginning
+	}
+
+	// if the record we found is empty, then return false
+	if lp.records[hash].isEmpty {
+		var empty T
+		return false, empty
+	}
+
+	return true, lp.records[hash].data
 }

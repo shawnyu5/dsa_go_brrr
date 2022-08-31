@@ -73,4 +73,32 @@ var _ = Describe("LPTable", func() {
 			Expect(table.IsEmpty()).To(BeFalse())
 		})
 	})
+
+	Context("Find()", func() {
+		It("should find a record", func() {
+			keys := createData()
+			table := hashmap.NewLPTable[int](10)
+			for i := 0; i < 10; i++ {
+				Expect(table.Update(keys[i], i)).To(BeTrue())
+			}
+			found, _ := table.Find(keys[0])
+			Expect(found).To(BeTrue())
+		})
+
+		It("should find a record with a lot of data", func() {
+			keys := createData()
+			table := hashmap.NewLPTable[int](len(keys))
+			for i := 0; i < len(keys); i++ {
+				Expect(table.Update(keys[i], i)).To(BeTrue())
+			}
+
+			// fmt.Println(fmt.Sprintf(" table: %+v", table)) // __AUTO_GENERATED_PRINT_VAR__
+
+			for i := 0; i < len(keys); i++ {
+				found, value := table.Find(keys[i])
+				Expect(found).To(BeTrue())
+				Expect(value).To(Equal(i), "Iteration: %d/%d", i, len(keys))
+			}
+		})
+	})
 })
