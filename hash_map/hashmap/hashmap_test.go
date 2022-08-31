@@ -55,6 +55,7 @@ var _ = Describe("LPTable", func() {
 	Context("Update()", func() {
 		It("should insert a single record", func() {
 			table := hashmap.NewLPTable[int](10)
+			Expect(table.Capacity).To(Equal(10))
 			table.Update("hello", 1)
 			Expect(table.NumRecords).To(Equal(1))
 		})

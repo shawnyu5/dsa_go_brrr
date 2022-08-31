@@ -14,16 +14,14 @@ type record[T comparable] struct {
 
 // base hash table to drive other hash tables from
 type hashTable[T comparable] struct {
-	// updates a record in the table with the given key and data
-	Update func(string, T) bool
-	// removes a record from the table with the given key
-	Remove func(string) bool
-	// find a record in the table with the given key
-	Find func(string) bool
+	// // updates a record in the table with the given key and data
+	// Update func(string, T) bool
+	// // removes a record from the table with the given key
+	// Remove func(string) bool
+	// // find a record in the table with the given key
+	// Find func(string) bool
 	// number of records in the table
 	NumRecords int
-	// weather the table is empty
-	IsEmpty func() bool
 	// maximum number of records allowed in the table
 	Capacity int
 }
@@ -36,6 +34,11 @@ type lpTable[T comparable] struct {
 	// number of records in the table
 	front *record[T]
 	back  *record[T]
+}
+
+// IsEmpty returns true if the table is empty, false otherwise
+func (lp *hashTable[T]) IsEmpty() bool {
+	return lp.NumRecords == 0
 }
 
 // Hash takes a string and returns a hash object from it
@@ -70,7 +73,7 @@ func (lp *lpTable[T]) Update(key string, value T) bool {
 			lp.records[hsh].key != key {
 
 			hsh++
-			hsh = hsh + 1%uint32(lp.Capacity)
+			hsh = hsh + 1%uint32(lp.Capacity) // treat the table as a circular array, when we reach the end, go back to the beginning
 			// i = (1 + i) % lp.Capacity
 		}
 	}
@@ -82,9 +85,4 @@ func (lp *lpTable[T]) Update(key string, value T) bool {
 	lp.records[hsh] = r
 	lp.NumRecords++
 	return true
-}
-
-// IsEmpty returns true if the table is empty, false otherwise
-func (lp *lpTable[T]) IsEmpty() bool {
-	return lp.NumRecords == 0
 }
