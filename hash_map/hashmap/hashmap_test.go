@@ -46,9 +46,6 @@ var _ = Describe("LPTable", func() {
 			Expect(table).ToNot(BeNil())
 			Expect(table.Capacity).To(Equal(10))
 			Expect(table.NumRecords).To(Equal(0))
-
-			// for _, v := range table.records {
-			// }
 		})
 	})
 
@@ -58,6 +55,22 @@ var _ = Describe("LPTable", func() {
 			Expect(table.Capacity).To(Equal(10))
 			table.Update("hello", 1)
 			Expect(table.NumRecords).To(Equal(1))
+		})
+
+		It("Should handle linear collisions correctly", func() {
+			// collisions that do not wrap around the table
+			table := hashmap.NewLPTable[int](10)
+
+			inserted := table.Update("apple", 1)
+			Expect(inserted).To(BeTrue())
+			inserted = table.Update("orange", 2)
+			Expect(inserted).To(BeTrue())
+
+			_, value := table.Find("apple")
+			Expect(value).To(Equal(1))
+
+			_, value = table.Find("orange")
+			Expect(value).To(Equal(2))
 		})
 
 		It("should insert a bunch of records", func() {
@@ -85,20 +98,20 @@ var _ = Describe("LPTable", func() {
 			Expect(found).To(BeTrue())
 		})
 
-		It("should find a record with a lot of data", func() {
-			keys := createData()
-			table := hashmap.NewLPTable[int](len(keys))
-			for i := 0; i < len(keys); i++ {
-				Expect(table.Update(keys[i], i)).To(BeTrue())
-			}
+		// It("should find a record with a lot of data", func() {
+		// keys := createData()
+		// table := hashmap.NewLPTable[int](len(keys))
+		// for i := 0; i < len(keys); i++ {
+		// Expect(table.Update(keys[i], i)).To(BeTrue())
+		// }
 
-			// fmt.Println(fmt.Sprintf(" table: %+v", table)) // __AUTO_GENERATED_PRINT_VAR__
+		// // fmt.Println(fmt.Sprintf(" table: %+v", table)) // __AUTO_GENERATED_PRINT_VAR__
 
-			for i := 0; i < len(keys); i++ {
-				found, value := table.Find(keys[i])
-				Expect(found).To(BeTrue())
-				Expect(value).To(Equal(i), "Iteration: %d/%d", i, len(keys))
-			}
-		})
+		// for i := 0; i < len(keys); i++ {
+		// found, value := table.Find(keys[i])
+		// Expect(found).To(BeTrue())
+		// Expect(value).To(Equal(i), "Iteration: %d/%d", i, len(keys))
+		// }
+		// })
 	})
 })
