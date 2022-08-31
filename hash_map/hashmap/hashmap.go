@@ -1,7 +1,6 @@
 package hashmap
 
 import (
-	"fmt"
 	"unicode/utf8"
 )
 
@@ -67,15 +66,14 @@ func NewLPTable[T comparable](capacity int) lpTable[T] {
 // Update updates a record in the table with the given key and value. Returns true if update is successful, false other wise
 func (lp *lpTable[T]) Update(key string, value T) bool {
 	hash := Hash(key) % lp.Capacity
-	fmt.Println(fmt.Sprintf("Update hsh: %v", hash)) // __AUTO_GENERATED_PRINT_VAR__
 	r := record[T]{key: key, data: value}
 
-	startingHash := hash + 1
+	startingHash := (hash + 1) % lp.Capacity
+
 	// if the current index is full, find the next empty index
 	if !lp.records[hash].isEmpty {
 		// if the current index is not empty, and the key does not match, move to the next hash
-		for hash < lp.Capacity &&
-			!lp.records[hash].isEmpty &&
+		for !lp.records[hash].isEmpty &&
 			lp.records[hash].key != key &&
 			hash != startingHash {
 			hash = (hash + 1) % lp.Capacity // treat the table as a circular array, when we reach the end, go back to the beginning
@@ -101,10 +99,9 @@ func (lp *lpTable[T]) Find(key string) (bool, T) {
 	}
 
 	// start at the next hash over, while keeping track of the old hash
-	hash := startingHash + 1
+	hash := (startingHash + 1) % lp.Capacity
 	// keep looking until we find the key we are looking for. If we've made a full circle, then we havent found anything
 	for hash != lp.Capacity && key != lp.records[hash].key && hash != startingHash {
-		// hash++
 		hash = (hash + 1) % lp.Capacity // treat the table as a circular array, when we reach the end, go back to the beginning
 	}
 

@@ -73,6 +73,16 @@ var _ = Describe("LPTable", func() {
 			Expect(value).To(Equal(2))
 		})
 
+		// TODO: test this later
+		// It("should handle circular collisions correctly", func() {
+		// // collisions that wrap around the table
+		// table := hashmap.NewLPTable[int](3)
+		// table.Update("apple", 1)
+		// table.Update("orange", 2)
+		// table.Update("banana", 3)
+
+		// })
+
 		It("should insert a bunch of records", func() {
 			keys := createData()
 			table := hashmap.NewLPTable[int](10)
@@ -96,6 +106,16 @@ var _ = Describe("LPTable", func() {
 			}
 			found, _ := table.Find(keys[0])
 			Expect(found).To(BeTrue())
+		})
+
+		It("should find a record with a collision", func() {
+			table := hashmap.NewLPTable[int](10)
+			table.Update("apple", 1)
+			table.Update("orange", 2)
+			// table.Update("bee", 3)
+			found, value := table.Find("orange")
+			Expect(found).To(BeTrue())
+			Expect(value).To(Equal(2), "orange should have value 2")
 		})
 
 		// It("should find a record with a lot of data", func() {
