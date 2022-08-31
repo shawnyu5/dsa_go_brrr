@@ -4,7 +4,7 @@ import (
 	"hash/fnv"
 )
 
-type record[T any] struct {
+type record[T comparable] struct {
 	// the unhashed key of the record
 	key  string
 	data T
@@ -13,7 +13,7 @@ type record[T any] struct {
 }
 
 // base hash table to drive other hash tables from
-type hashTable[T any] struct {
+type hashTable[T comparable] struct {
 	// updates a record in the table with the given key and data
 	Update func(string, T) bool
 	// removes a record from the table with the given key
