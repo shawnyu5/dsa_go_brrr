@@ -1,18 +1,19 @@
 package hashmap
 
 import (
-	"crypto/sha256"
-	"hash"
+	"hash/fnv"
 )
 
-type record[T comparable] struct {
+type record[T any] struct {
 	// the unhashed key of the record
 	key  string
 	data T
+	// keeps track of whether this record stores data
+	isEmpty bool
 }
 
 // base hash table to drive other hash tables from
-type hashTable[T comparable] struct {
+type hashTable[T any] struct {
 	// updates a record in the table with the given key and data
 	Update func(string, T) bool
 	// removes a record from the table with the given key
@@ -21,6 +22,7 @@ type hashTable[T comparable] struct {
 	Find func(string) bool
 	// number of records in the table
 	NumRecords int
+
 	// weather the table is empty
 	IsEmpty func() bool
 	// maximum number of records allowed in the table
