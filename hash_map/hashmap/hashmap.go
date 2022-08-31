@@ -1,51 +1,88 @@
 package hashmap
 
 import (
-	"crypto/sha256"
-	"hash"
+	"hash/fnv"
 )
 
 type record[T comparable] struct {
 	// the unhashed key of the record
 	key  string
 	data T
+	// keeps track of whether this record stores data
+	isEmpty bool
 }
 
 // base hash table to drive other hash tables from
 type hashTable[T comparable] struct {
-	// updates a record in the table with the given key and data
-	Update func(string, T) bool
-	// removes a record from the table with the given key
-	Remove func(string) bool
-	// find a record in the table with the given key
-	Find func(string) bool
+	// // updates a record in the table with the given key and data
+	// Update func(string, T) bool
+	// // removes a record from the table with the given key
+	// Remove func(string) bool
+	// // find a record in the table with the given key
+	// Find func(string) bool
 	// number of records in the table
 	NumRecords int
-	// weather the table is empty
-	IsEmpty func() bool
 	// maximum number of records allowed in the table
 	Capacity int
 }
 
 // hash table using linear probing as the collision resolution strategy
 type lpTable[T comparable] struct {
+	// the array of records
+	records []record[T]
 	hashTable[T]
 	// number of records in the table
-	numRecords int
-	front      *record[T]
-	back       *record[T]
+	front *record[T]
+	back  *record[T]
+}
+
+// IsEmpty returns true if the table is empty, false otherwise
+func (lp *hashTable[T]) IsEmpty() bool {
+	return lp.NumRecords == 0
 }
 
 // Hash takes a string and returns a hash object from it
-func Hash(key string) hash.Hash {
-	hash := sha256.New()
+func Hash(key string) uint32 {
+	hash := fnv.New32a()
 	hash.Write([]byte(key))
-	return hash
+	return hash.Sum32()
 }
 
 // NewLPTable constructs a new lpTable with the given capacity
 func NewLPTable[T comparable](capacity int) lpTable[T] {
 	table := lpTable[T]{}
+	table.records = make([]record[T], capacity)
+	// set all records to empty
+	for i := 0; i < capacity; i++ {
+		table.records[i].isEmpty = true
+	}
 	table.Capacity = capacity
 	return table
+}
+
+// Update updates a record in the table with the given key and value. Returns true if update is successful, false other wise
+func (lp *lpTable[T]) Update(key string, value T) bool {
+	hsh := Hash(key) % uint32(lp.Capacity)
+	r := record[T]{key: key, data: value}
+
+	// if the current index is full, find the next empty index
+	if !lp.records[hsh].isEmpty {
+		// if the current index is not empty, and the key does not match, move to the next hash
+		for hsh < uint32(lp.Capacity) &&
+			!lp.records[hsh].isEmpty &&
+			lp.records[hsh].key != key {
+
+			hsh++
+			hsh = hsh + 1%uint32(lp.Capacity) // treat the table as a circular array, when we reach the end, go back to the beginning
+			// i = (1 + i) % lp.Capacity
+		}
+	}
+
+	if lp.NumRecords == lp.Capacity {
+		return false
+	}
+
+	lp.records[hsh] = r
+	lp.NumRecords++
+	return true
 }
