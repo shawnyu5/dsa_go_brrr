@@ -1,7 +1,7 @@
 package hashmap
 
 import (
-	"hash/fnv"
+	"unicode/utf8"
 )
 
 type record[T comparable] struct {
@@ -42,10 +42,13 @@ func (lp *hashTable[T]) IsEmpty() bool {
 }
 
 // Hash takes a string and returns a hash object from it
-func Hash(key string) uint32 {
-	hash := fnv.New32a()
-	hash.Write([]byte(key))
-	return hash.Sum32()
+func Hash(key string) int {
+	// hash := fnv.New32a()
+	// hash.Write([]byte(key))
+	// return hash.Sum32()
+	last := key[len(key)-1:]
+	i, _ := utf8.DecodeRuneInString(last)
+	return int(i)
 }
 
 // NewLPTable constructs a new lpTable with the given capacity
@@ -62,19 +65,18 @@ func NewLPTable[T comparable](capacity int) lpTable[T] {
 
 // Update updates a record in the table with the given key and value. Returns true if update is successful, false other wise
 func (lp *lpTable[T]) Update(key string, value T) bool {
-	hsh := Hash(key) % uint32(lp.Capacity)
+	hash := Hash(key) % lp.Capacity
 	r := record[T]{key: key, data: value}
 
-	// if the current index is full, find the next empty index
-	if !lp.records[hsh].isEmpty {
-		// if the current index is not empty, and the key does not match, move to the next hash
-		for hsh < uint32(lp.Capacity) &&
-			!lp.records[hsh].isEmpty &&
-			lp.records[hsh].key != key {
+	startingHash := (hash + 1) % lp.Capacity
 
-			hsh++
-			hsh = hsh + 1%uint32(lp.Capacity) // treat the table as a circular array, when we reach the end, go back to the beginning
-			// i = (1 + i) % lp.Capacity
+	// if the current index is full, find the next empty index
+	if !lp.records[hash].isEmpty {
+		// if the current index is not empty, and the key does not match, move to the next hash
+		for !lp.records[hash].isEmpty &&
+			lp.records[hash].key != key &&
+			hash != startingHash {
+			hash = (hash + 1) % lp.Capacity // treat the table as a circular array, when we reach the end, go back to the beginning
 		}
 	}
 
@@ -82,7 +84,32 @@ func (lp *lpTable[T]) Update(key string, value T) bool {
 		return false
 	}
 
-	lp.records[hsh] = r
+	lp.records[hash] = r
 	lp.NumRecords++
 	return true
+}
+
+// Find finds a record in the table with the given key, and assign the value to value passed in. Returns true if the record is found, false otherwise
+func (lp *lpTable[T]) Find(key string) (bool, T) {
+	startingHash := Hash(key) % lp.Capacity
+
+	// if current index contains the key we are looking for, return
+	if lp.records[startingHash].key == key {
+		return true, lp.records[startingHash].data
+	}
+
+	// start at the next hash over, while keeping track of the old hash
+	hash := (startingHash + 1) % lp.Capacity
+	// keep looking until we find the key we are looking for. If we've made a full circle, then we havent found anything
+	for hash != lp.Capacity && key != lp.records[hash].key && hash != startingHash {
+		hash = (hash + 1) % lp.Capacity // treat the table as a circular array, when we reach the end, go back to the beginning
+	}
+
+	// if the record we found is empty, then return false
+	if lp.records[hash].isEmpty {
+		var empty T
+		return false, empty
+	}
+
+	return true, lp.records[hash].data
 }
