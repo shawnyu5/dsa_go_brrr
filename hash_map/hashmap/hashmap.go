@@ -22,6 +22,8 @@ type hashTable[T comparable] struct {
 	NumRecords int
 	// maximum number of records allowed in the table
 	Capacity int
+	// hash function
+	Hash func(string) int
 }
 
 // hash table using linear probing as the collision resolution strategy
@@ -39,8 +41,8 @@ func (lp *hashTable[T]) IsEmpty() bool {
 	return lp.NumRecords == 0
 }
 
-// Hash takes a string and returns a hash object from it
-func Hash(key string) int {
+// hash takes a string and returns a hash object from it
+func hash(key string) int {
 	hash := fnv.New32a()
 	hash.Write([]byte(key))
 	return int(hash.Sum32())
@@ -53,6 +55,8 @@ func Hash(key string) int {
 func NewLPTable[T comparable](capacity int) lpTable[T] {
 	table := lpTable[T]{}
 	table.records = make([]record[T], capacity)
+	table.Hash = hash
+
 	// set all records to empty
 	for i := 0; i < capacity; i++ {
 		table.records[i].isEmpty = true
@@ -63,7 +67,7 @@ func NewLPTable[T comparable](capacity int) lpTable[T] {
 
 // Update updates a record in the table with the given key and value. Returns true if update is successful, false other wise
 func (lp *lpTable[T]) Update(key string, value T) bool {
-	hash := Hash(key) % lp.Capacity
+	hash := lp.Hash(key) % lp.Capacity
 	r := record[T]{key: key, data: value}
 
 	startingHash := hash
@@ -95,7 +99,7 @@ func (lp *lpTable[T]) Update(key string, value T) bool {
 
 // Find finds a record in the table with the given key, and assign the value to value passed in. Returns true if the record is found, false otherwise
 func (lp *lpTable[T]) Find(key string) (bool, T) {
-	startingHash := Hash(key) % lp.Capacity
+	startingHash := lp.Hash(key) % lp.Capacity
 
 	// if current index contains the key we are looking for, return
 	if lp.records[startingHash].key == key {

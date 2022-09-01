@@ -3,6 +3,7 @@ package hashmap_test
 import (
 	"bufio"
 	"bytes"
+	"fmt"
 	"os"
 
 	"github.com/shawnyu5/hash_map/hashmap"
@@ -35,7 +36,8 @@ func createData() []string {
 var _ = Describe("LPTable", func() {
 	Context("Hash()", func() {
 		It("should return a hash object from a string", func() {
-			hash := hashmap.Hash("hello")
+			table := hashmap.NewLPTable[int](10)
+			hash := table.Hash("hello")
 			Expect(hash).ToNot(BeNil())
 		})
 	})
@@ -58,28 +60,32 @@ var _ = Describe("LPTable", func() {
 		})
 
 		// TODO: idk how to cause a collision
-		// It("Should handle linear collisions correctly", func() {
-		// // collisions that do not wrap around the table
-		// table := hashmap.NewLPTable[int](2)
+		It("Should handle linear collisions correctly", func() {
+			// collisions that do not wrap around the table
+			table := hashmap.NewLPTable[int](2)
+			table.Hash = func(key string) int {
+				return 0
+			}
 
-		// inserted := table.Update("apple", 1)
-		// Expect(inserted).To(BeTrue())
-		// inserted = table.Update("applee", 2)
-		// Expect(inserted).To(BeTrue())
+			inserted := table.Update("apple", 1)
+			Expect(inserted).To(BeTrue())
+			inserted = table.Update("orange", 2)
+			Expect(inserted).To(BeTrue())
 
-		// _, value := table.Find("apple")
-		// Expect(value).To(Equal(1))
+			_, value := table.Find("apple")
+			Expect(value).To(Equal(1))
 
-		// _, value = table.Find("applee")
-		// Expect(value).To(Equal(2))
-		// })
+			_, value = table.Find("orange")
+			Expect(value).To(Equal(2))
+			fmt.Println(fmt.Sprintf(" table: %+v", table)) // __AUTO_GENERATED_PRINT_VAR__
+		})
 
-		// It("should update a value without increasing the number of records", func() {
-		// table := hashmap.NewLPTable[int](10)
-		// table.Update("hello", 1)
-		// table.Update("hello", 1)
-		// Expect(table.NumRecords).To(Equal(1))
-		// })
+		It("should update a value without increasing the number of records", func() {
+			table := hashmap.NewLPTable[int](10)
+			table.Update("hello", 1)
+			table.Update("hello", 1)
+			Expect(table.NumRecords).To(Equal(1))
+		})
 
 		// TODO: test this later
 		// It("should handle circular collisions correctly", func() {
@@ -133,8 +139,6 @@ var _ = Describe("LPTable", func() {
 			for i := 0; i < len(keys); i++ {
 				Expect(table.Update(keys[i], i)).To(BeTrue())
 			}
-
-			// fmt.Println(fmt.Sprintf(" table: %+v", table)) // __AUTO_GENERATED_PRINT_VAR__
 
 			for i := 0; i < len(keys); i++ {
 				found, value := table.Find(keys[i])
