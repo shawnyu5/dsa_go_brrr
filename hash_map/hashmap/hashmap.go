@@ -1,8 +1,6 @@
 package hashmap
 
-import (
-	"unicode/utf8"
-)
+import "hash/fnv"
 
 type record[T comparable] struct {
 	// the unhashed key of the record
@@ -43,12 +41,12 @@ func (lp *hashTable[T]) IsEmpty() bool {
 
 // Hash takes a string and returns a hash object from it
 func Hash(key string) int {
-	// hash := fnv.New32a()
-	// hash.Write([]byte(key))
-	// return hash.Sum32()
-	last := key[len(key)-1:]
-	i, _ := utf8.DecodeRuneInString(last)
-	return int(i)
+	hash := fnv.New32a()
+	hash.Write([]byte(key))
+	return int(hash.Sum32())
+	// last := key[len(key)-1:]
+	// i, _ := utf8.DecodeRuneInString(last)
+	// return int(i)
 }
 
 // NewLPTable constructs a new lpTable with the given capacity
@@ -68,15 +66,14 @@ func (lp *lpTable[T]) Update(key string, value T) bool {
 	hash := Hash(key) % lp.Capacity
 	r := record[T]{key: key, data: value}
 
-	startingHash := (hash + 1) % lp.Capacity
+	startingHash := hash
 
-	// if the current index is full, find the next empty index
-	if !lp.records[hash].isEmpty {
-		// if the current index is not empty, and the key does not match, move to the next hash
-		for !lp.records[hash].isEmpty &&
-			lp.records[hash].key != key &&
-			hash != startingHash {
-			hash = (hash + 1) % lp.Capacity // treat the table as a circular array, when we reach the end, go back to the beginning
+	// if the current index is not empty, and the key does not match, move to the next hash
+	for !lp.records[hash].isEmpty &&
+		lp.records[hash].key != key {
+		hash = (hash + 1) % lp.Capacity // treat the table as a circular array, when we reach the end, go back to the beginning
+		if hash == startingHash {
+			break
 		}
 	}
 
