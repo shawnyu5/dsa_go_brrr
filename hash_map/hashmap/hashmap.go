@@ -84,8 +84,15 @@ func (lp *lpTable[T]) Update(key string, value T) bool {
 		return false
 	}
 
-	lp.records[hash] = r
-	lp.NumRecords++
+	// if the record is empty, then we are inserting
+	if lp.records[hash].isEmpty {
+		lp.records[hash] = r
+		lp.NumRecords++
+	} else {
+		// otherwise, we are updating, NumRecords does not increase
+		lp.records[hash] = r
+	}
+
 	return true
 }
 

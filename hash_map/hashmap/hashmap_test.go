@@ -73,6 +73,13 @@ var _ = Describe("LPTable", func() {
 			Expect(value).To(Equal(2))
 		})
 
+		It("should update a value without increasing the number of records", func() {
+			table := hashmap.NewLPTable[int](10)
+			table.Update("hello", 1)
+			table.Update("hello", 1)
+			Expect(table.NumRecords).To(Equal(1))
+		})
+
 		// TODO: test this later
 		// It("should handle circular collisions correctly", func() {
 		// // collisions that wrap around the table
@@ -83,18 +90,18 @@ var _ = Describe("LPTable", func() {
 
 		// })
 
-		It("should insert a bunch of records", func() {
-			keys := createData()
-			table := hashmap.NewLPTable[int](10)
-			Expect(table.IsEmpty()).To(BeTrue()) // table should be empty to begin with
-			Expect(table.Capacity).To(Equal(10))
+		// It("should insert a bunch of records", func() {
+		// keys := createData()
+		// table := hashmap.NewLPTable[int](10)
+		// Expect(table.IsEmpty()).To(BeTrue()) // table should be empty to begin with
+		// Expect(table.Capacity).To(Equal(10))
 
-			for i := 0; i < 10; i++ {
-				Expect(table.Update(keys[i], i)).To(BeTrue())
-				Expect(table.NumRecords).To(Equal(i + 1))
-			}
-			Expect(table.IsEmpty()).To(BeFalse())
-		})
+		// for i := 0; i < 10; i++ {
+		// Expect(table.Update(keys[i], i)).To(BeTrue())
+		// Expect(table.NumRecords).To(Equal(i + 1))
+		// }
+		// Expect(table.IsEmpty()).To(BeFalse())
+		// })
 	})
 
 	Context("Find()", func() {
