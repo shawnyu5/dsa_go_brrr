@@ -1,6 +1,8 @@
 package hashmap
 
-import "hash/fnv"
+import (
+	"hash/fnv"
+)
 
 type record[T comparable] struct {
 	// the unhashed key of the record
@@ -46,9 +48,6 @@ func hash(key string) int {
 	hash := fnv.New32a()
 	hash.Write([]byte(key))
 	return int(hash.Sum32())
-	// last := key[len(key)-1:]
-	// i, _ := utf8.DecodeRuneInString(last)
-	// return int(i)
 }
 
 // NewLPTable constructs a new lpTable with the given capacity
@@ -97,7 +96,8 @@ func (lp *lpTable[T]) Update(key string, value T) bool {
 	return true
 }
 
-// Find finds a record in the table with the given key, and assign the value to value passed in. Returns true if the record is found, false otherwise
+// Find finds a record in the table with the given key, and assign the value to value passed in.
+// Returns true and the record it self if the record is found, false and default value of T otherwise
 func (lp *lpTable[T]) Find(key string) (bool, T) {
 	startingHash := lp.Hash(key) % lp.Capacity
 
@@ -113,8 +113,9 @@ func (lp *lpTable[T]) Find(key string) (bool, T) {
 		hash = (hash + 1) % lp.Capacity // treat the table as a circular array, when we reach the end, go back to the beginning
 	}
 
-	// if the record we found is empty, then return false
-	if lp.records[hash].isEmpty {
+	// if the record we found is empty, or key does not match, then return false
+	// the table could make full circle without finding the correct data member, hence the second condition is needed
+	if lp.records[hash].isEmpty || lp.records[hash].key != key {
 		var empty T
 		return false, empty
 	}
