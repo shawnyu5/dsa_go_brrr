@@ -1,8 +1,6 @@
 package linkedlist
 
 import (
-	"fmt"
-
 	"golang.org/x/exp/constraints"
 )
 
@@ -143,7 +141,8 @@ func (l *LinkedList[T]) Sort(first *Iterator[T], last *Iterator[T]) *LinkedList[
 
 	for begin != end {
 		// if curr2 lies in between curr1 and next1
-		if list2.Get() >= list1.Get() && list2.Get() <= list1Next.Get() {
+		if list2.Get() >= list1.Get() &&
+			list2.Get() <= list1Next.Get() {
 			list2.Increment()
 			list2Next = list2
 			list2.Decrement()
@@ -154,14 +153,8 @@ func (l *LinkedList[T]) Sort(first *Iterator[T], last *Iterator[T]) *LinkedList[
 			list1 = list2
 			list2 = list2Next
 		} else {
-			// // if more nodes in first list
-			// if (next1->next) {
-			// next1 = next1->next;
-			// curr1 = curr1->next;
-			// }
 
 			if list1Next.current.next != nil {
-				fmt.Println("Sort") // __AUTO_GENERATED_PRINTF__
 				list1Next.Increment()
 				list1.Increment()
 
@@ -172,7 +165,6 @@ func (l *LinkedList[T]) Sort(first *Iterator[T], last *Iterator[T]) *LinkedList[
 			}
 		}
 	}
-
 	return l
 }
 
