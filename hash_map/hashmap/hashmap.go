@@ -122,3 +122,49 @@ func (lp *lpTable[T]) Find(key string) (bool, T) {
 
 	return true, lp.records[hash].data
 }
+
+// Remove removes a record from the table with the given key. Returns true if the record is found and removed, false otherwise
+func (lp *lpTable[T]) Remove(key string) bool {
+	hash := lp.Hash(key) % lp.Capacity
+	// keep track of the starting hash before modification
+	oldHash := hash
+	// emptyRecord empties out a record
+	emptyRecord := func(r *record[T]) {
+		r.isEmpty = true
+		lp.NumRecords--
+		r.key = ""
+		var empty T
+		r.data = empty
+	}
+
+	// if the current index is the one containing the key, then remove it
+	if lp.records[hash].key == key {
+		emptyRecord(&lp.records[hash])
+	} else {
+		// we look for the key
+		startingHash := hash
+		// set the current hash to the hash after the starting. Since we know the starting one is not the one we are looking for.
+		hash := (startingHash + 1) % lp.Capacity
+		// keep looking until we find the key we are looking for. If we've made a full circle, then we havent found anything
+		for key != lp.records[hash].key && hash != startingHash {
+			hash = (hash + 1) % lp.Capacity // treat the table as a circular array, when we reach the end, go back to the beginning
+		}
+		// if the record we found is empty, or is not the key we are looking for, then return false
+		if lp.records[hash].isEmpty || lp.records[hash].key != key {
+			return false
+		}
+		// otherwise, remove the record
+		emptyRecord(&lp.records[hash])
+	}
+	// shift records that needs shifting over
+	// skip the empty record we just removed
+	for correctHash := oldHash + 1; correctHash < lp.Capacity; correctHash++ {
+		currentHash := lp.Hash(lp.records[correctHash].key)
+		// as long as the current index hash doesnt match the index its suppose to be at, then we shift it forward one index
+		if currentHash != correctHash {
+			lp.records[correctHash-1] = lp.records[correctHash]
+			emptyRecord(&lp.records[correctHash]) // and empty out the current index, that has been shifted over
+		}
+	}
+	return true
+}
