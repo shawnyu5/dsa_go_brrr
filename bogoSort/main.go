@@ -22,6 +22,7 @@ func main() {
 
 }
 
+// bogoSort performs bogo sort on a list, and return a sorted list
 func bogoSort(list []int) []int {
 	rand.Seed(time.Now().Unix())
 	rand.Shuffle(len(list), func(i, j int) {
