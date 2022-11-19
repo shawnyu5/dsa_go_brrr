@@ -10,7 +10,7 @@ type LinkedList[T constraints.Ordered] struct {
 	// number of records in the list
 	numRecords int
 	// const iterator
-	Cit Const_iterator[T]
+	CIt Const_iterator[T]
 	// iterator
 	It Iterator[T]
 }
@@ -27,7 +27,7 @@ func NewList[T constraints.Ordered]() LinkedList[T] {
 	list.front.next = list.back
 	list.back.prev = list.front
 	begin := list.begin()
-	list.Cit = newConstIterator(&begin, &list)
+	list.CIt = newConstIterator(&begin, &list)
 	list.It = newIterator(&begin, &list)
 	return list
 }
@@ -79,6 +79,7 @@ func (l *LinkedList[T]) Search(data T) Iterator[T] {
 }
 
 // Erase erases the node that the iterator is pointing to. And returns an iterator pointing to the next node
+// Returns the end of the list if the node does not exist
 func (l *LinkedList[T]) Erase(it Iterator[T]) Iterator[T] {
 	found := false
 	rmPosition := l.It.Begin()
@@ -109,62 +110,79 @@ func (l *LinkedList[T]) Erase(it Iterator[T]) Iterator[T] {
 	return it
 }
 
-// split accepts 2 iterators pointing to the begining and end of the list, EXCLUDING sentinels
-// It splits the list into two halves, returns 3 iterators, pointing to the beginning, middle, and end of the list
-func (l *LinkedList[T]) Split(begin Iterator[T], end Iterator[T]) (Iterator[T], Iterator[T], Iterator[T]) {
-	midPoint := begin
-	nav := begin
-	nav.Increment() // nav is one ahead of midPoint
+// split accepts 2 iterators pointing to the begining and end of the list
+// It splits the list into two halves, returns 3 iterators pointing to the beginning, middle, end of the list
+// func (l *LinkedList[T]) Split(begin Iterator[T], end Iterator[T]) (Iterator[T], Iterator[T], Iterator[T]) {
+// midPoint := begin.myList.numRecords / 2
 
-	for nav != end {
-		nav.Increment()
-		if nav != end {
-			midPoint.Increment()
-			nav.Increment()
-		}
-	}
-	midPoint.Increment()
+// for i := 0; i < midPoint; i++ {
+// end.Increment()
+// }
+// // return begin, end
 
-	return begin, midPoint, end
-}
+// // midPoint := begin
+// // nav := begin
+// // nav.Increment() // nav is one ahead of midPoint
+
+// // for nav != end {
+// // nav.Increment()
+// // if nav != end {
+// // midPoint.Increment()
+// // nav.Increment()
+// // }
+// // }
+// // midPoint.Increment()
+
+// // return begin, end
+// }
 
 // TODO: implement merge sort later
 func (l *LinkedList[T]) Sort(first *Iterator[T], last *Iterator[T]) *LinkedList[T] {
-	begin, mid, end := l.Split(*first, *last)
+	// list1 := first
+	// list2 := first.current.next
 
-	list1 := begin
-	list2 := mid
-	begin.Increment()
-	mid.Increment()
-	list1Next := begin
-	list2Next := mid
+	// begin, end := first, last
+	// for {
+	// begin, end := l.Split(*begin, *end)
+	// // if one of the half of the list is the length of 1, stop splitting
+	// if begin.myList.numRecords == 1 || end.myList.numRecords == 1 {
+	// break
+	// }
+	// }
 
-	for begin != end {
-		// if curr2 lies in between curr1 and next1
-		if list2.Get() >= list1.Get() &&
-			list2.Get() <= list1Next.Get() {
-			list2.Increment()
-			list2Next = list2
-			list2.Decrement()
+	// list1 := begin
+	// list2 := mid
+	// begin.Increment()
+	// mid.Increment()
+	// list1Next := begin
+	// list2Next := mid
 
-			list1.current.next = list2.current
-			list2.current.next = list1Next.current
+	// for begin != end {
+	// // if curr2 lies in between curr1 and next1
+	// if list2.Get() >= list1.Get() &&
+	// list2.Get() <= list1Next.Get() {
+	// list2.Increment()
+	// list2Next = list2
+	// list2.Decrement()
 
-			list1 = list2
-			list2 = list2Next
-		} else {
+	// list1.current.next = list2.current
+	// list2.current.next = list1Next.current
 
-			if list1Next.current.next != nil {
-				list1Next.Increment()
-				list1.Increment()
+	// list1 = list2
+	// list2 = list2Next
+	// } else {
 
-			} else { // else point the last node of first list to the remaining nodes of second list
+	// if list1Next.current.next != nil {
+	// list1Next.Increment()
+	// list1.Increment()
 
-				list1Next.current.next = list2.current
-				return l
-			}
-		}
-	}
+	// } else { // else point the last node of first list to the remaining nodes of second list
+
+	// list1Next.current.next = list2.current
+	// return l
+	// }
+	// }
+	// }
 	return l
 }
 

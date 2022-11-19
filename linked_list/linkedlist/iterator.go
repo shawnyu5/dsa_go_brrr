@@ -10,7 +10,9 @@ type Const_iterator[T constraints.Ordered] struct {
 
 // non const iterator
 type Iterator[T constraints.Ordered] struct {
-	myList  *LinkedList[T]
+	// the linked list
+	myList *LinkedList[T]
+	// the current node this iterator is pointing to
 	current *node[T]
 }
 
