@@ -49,7 +49,7 @@ var _ = Describe("Iterator", func() {
 			// construct a new list with sentinel nodes
 			list := linkedlist.NewList[int]()
 
-			cIt := list.Cit.CBegin()
+			cIt := list.CIt.CBegin()
 			// begin and end should point to the same sentinel node
 			Expect(cIt.CBegin()).To(Equal(cIt.CEnd()))
 		})

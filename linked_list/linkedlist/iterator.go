@@ -1,24 +1,28 @@
 package linkedlist
 
+import "golang.org/x/exp/constraints"
+
 // const iterator
-type Const_iterator[T comparable] struct {
+type Const_iterator[T constraints.Ordered] struct {
 	myList  *LinkedList[T]
 	current *node[T]
 }
 
 // non const iterator
-type Iterator[T comparable] struct {
-	myList  *LinkedList[T]
+type Iterator[T constraints.Ordered] struct {
+	// the linked list
+	myList *LinkedList[T]
+	// the current node this iterator is pointing to
 	current *node[T]
 }
 
 // newConstIterator constructs a new Const_iterator
-func newConstIterator[T comparable](curr *node[T], theList *LinkedList[T]) Const_iterator[T] {
+func newConstIterator[T constraints.Ordered](curr *node[T], theList *LinkedList[T]) Const_iterator[T] {
 	return Const_iterator[T]{myList: theList, current: curr}
 }
 
 // newIterator constructs a new Iterator
-func newIterator[T comparable](curr *node[T], theList *LinkedList[T]) Iterator[T] {
+func newIterator[T constraints.Ordered](curr *node[T], theList *LinkedList[T]) Iterator[T] {
 	return Iterator[T]{myList: theList, current: curr}
 }
 

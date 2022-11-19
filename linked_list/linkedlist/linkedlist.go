@@ -1,29 +1,33 @@
 package linkedlist
 
-type LinkedList[T comparable] struct {
+import (
+	"golang.org/x/exp/constraints"
+)
+
+type LinkedList[T constraints.Ordered] struct {
 	front *node[T]
 	back  *node[T]
 	// number of records in the list
 	numRecords int
 	// const iterator
-	Cit Const_iterator[T]
+	CIt Const_iterator[T]
 	// iterator
 	It Iterator[T]
 }
 
-type node[T comparable] struct {
+type node[T constraints.Ordered] struct {
 	data T
 	next *node[T]
 	prev *node[T]
 }
 
 // NewList constructs a new LinkedList with sentinel nodes
-func NewList[T comparable]() LinkedList[T] {
+func NewList[T constraints.Ordered]() LinkedList[T] {
 	list := LinkedList[T]{front: &node[T]{}, back: &node[T]{}}
 	list.front.next = list.back
 	list.back.prev = list.front
 	begin := list.begin()
-	list.Cit = newConstIterator(&begin, &list)
+	list.CIt = newConstIterator(&begin, &list)
 	list.It = newIterator(&begin, &list)
 	return list
 }
@@ -74,25 +78,8 @@ func (l *LinkedList[T]) Search(data T) Iterator[T] {
 	return it
 }
 
-// Split splits the list into two halves, returns 2 iterators pointing to the beginning of each half
-func (l *LinkedList[T]) Split(begin Iterator[T], end Iterator[T]) (Iterator[T], Iterator[T]) {
-	midPoint := begin
-	nav := begin
-	nav.Increment() // nav is one ahead of midPoint
-
-	for nav != l.It.End() {
-		nav.Increment()
-		if nav != l.It.End() {
-			midPoint.Increment()
-			nav.Increment()
-		}
-	}
-
-	midPoint.Increment()
-	return l.It.Begin(), midPoint
-}
-
 // Erase erases the node that the iterator is pointing to. And returns an iterator pointing to the next node
+// Returns the end of the list if the node does not exist
 func (l *LinkedList[T]) Erase(it Iterator[T]) Iterator[T] {
 	found := false
 	rmPosition := l.It.Begin()
@@ -123,12 +110,83 @@ func (l *LinkedList[T]) Erase(it Iterator[T]) Iterator[T] {
 	return it
 }
 
-// TODO: implement merge sort later
-func (l *LinkedList[T]) Sort(first *Iterator[T], last *Iterator[T]) {
-	panic("Not implemented")
+// split accepts 2 iterators pointing to the begining and end of the list
+// It splits the list into two halves, returns 3 iterators pointing to the beginning, middle, end of the list
+// func (l *LinkedList[T]) Split(begin Iterator[T], end Iterator[T]) (Iterator[T], Iterator[T], Iterator[T]) {
+// midPoint := begin.myList.numRecords / 2
 
+// for i := 0; i < midPoint; i++ {
+// end.Increment()
+// }
+// // return begin, end
+
+// // midPoint := begin
+// // nav := begin
+// // nav.Increment() // nav is one ahead of midPoint
+
+// // for nav != end {
+// // nav.Increment()
+// // if nav != end {
+// // midPoint.Increment()
+// // nav.Increment()
+// // }
+// // }
+// // midPoint.Increment()
+
+// // return begin, end
+// }
+
+// TODO: implement merge sort later
+func (l *LinkedList[T]) Sort(first *Iterator[T], last *Iterator[T]) *LinkedList[T] {
+	// list1 := first
+	// list2 := first.current.next
+
+	// begin, end := first, last
+	// for {
+	// begin, end := l.Split(*begin, *end)
+	// // if one of the half of the list is the length of 1, stop splitting
+	// if begin.myList.numRecords == 1 || end.myList.numRecords == 1 {
+	// break
+	// }
+	// }
+
+	// list1 := begin
+	// list2 := mid
+	// begin.Increment()
+	// mid.Increment()
+	// list1Next := begin
+	// list2Next := mid
+
+	// for begin != end {
+	// // if curr2 lies in between curr1 and next1
+	// if list2.Get() >= list1.Get() &&
+	// list2.Get() <= list1Next.Get() {
+	// list2.Increment()
+	// list2Next = list2
+	// list2.Decrement()
+
+	// list1.current.next = list2.current
+	// list2.current.next = list1Next.current
+
+	// list1 = list2
+	// list2 = list2Next
+	// } else {
+
+	// if list1Next.current.next != nil {
+	// list1Next.Increment()
+	// list1.Increment()
+
+	// } else { // else point the last node of first list to the remaining nodes of second list
+
+	// list1Next.current.next = list2.current
+	// return l
+	// }
+	// }
+	// }
+	return l
 }
 
+// mergeSort performs merge sort on 2 lists
 func (l *LinkedList[T]) mergeSort(n node[T]) {
-
+	// sortedList := NewList[T]()
 }
